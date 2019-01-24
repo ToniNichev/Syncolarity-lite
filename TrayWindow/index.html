@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <script type='text/javascript'>
+        // In such way we connect ipcRenderer to our page.
+        window.ipcRenderer = require('electron').ipcRenderer;
+        // The ipcRenderer module provides a few methods so you can send events from the render process (web page) to the main process.
+      </script>      
+      <link rel="stylesheet" media="screen" href="../global.css" />      
+      <link rel="stylesheet" media="screen" href="./logger.css" />      
+      <link rel="stylesheet" media="screen" href="./styles.css" />
+      
+      <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384-EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
+      <title>Syncolarity</title>
+    </head>
+    <body>
+      <div id="panelsContainer">
+          <div class='controlPannel'>
+              <div class='settings'>
+                <div class="label">Loading ...</div>
+                <div class="status-pannel">
+                  
+                </div>
+                <!--
+                <div class="settings-pannel">
+                  <input type="checkbox"><label for="male">Disable authomatic sync</label>
+                  <input type="checkbox"><label for="male">Two</label>
+                  <input type="checkbox"><label for="male">Three</label>
+                  <input type="checkbox"><label for="male">Four</label>
+                  <input type="checkbox"><label for="male">Five</label>
+                </div>
+                -->
+              </div>
+              <div class="buttonsHolder">
+                  <button class="button-push" title="Push to the server"><i class="fas fa-upload"></i></button><button class="button-pull" title="Pull from the server"><i class="fas fa-download"></i></button>
+              </div>          
+            </div>
+      </div>      
+      <div id="header" class="header">
+        <button id="setup"><i class="fas fa-cogs"></i></button>
+      </div>
+      <div id="body">
+        <div id='settingsList'></div>
+        <div id="footer">
+          <div class="label">All</div>
+          <div class="buttonsHolder">
+            <button id="btn-push" title="Push everything to the server"><i class="fas fa-upload"></i></button>        
+            <button id="btn-pull" title="Pull everything from the server"><i class="fas fa-download"></i></button>
+          </div>
+        </div>        
+        <div id="logWrapper">
+          <div id="log"></div>
+          <div id="controls">
+            <button id="clear-log">clear</button>
+            <button id="expand-log">expand</button>
+          </div>
+        </div>
+      </div>
+      <script src="window.js"></script>
+    </body>
+  </html>

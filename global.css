@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Exo+2:300,400,700');
+
+body {
+    font-family: 'Exo 2', sans-serif; 
+    font-weight: 300;
+    font-size: 15px;
+    padding: 0px;
+    margin: 0px;
+    background: rgb(226, 234, 241);
+    overflow: hidden;
+}
+
+
+button {
+    cursor: pointer;
+    transition: background-color, color 350ms linear;
+}
+
+button:hover {
+    background: #b8bdc9;
+    color: white;
+    cursor: pointer;
+}
+  
+#save {
+    padding: 10px;
+    width: 100%;
+}
+
+.header {
+    background: rgb(239, 237, 237);
+}

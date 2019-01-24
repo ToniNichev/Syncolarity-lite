@@ -1,0 +1,87 @@
+button {
+  background: none;
+  border: none;
+}
+
+#interval {
+  width: 30px;
+  margin-right: 5px;
+}
+
+#footer {
+  padding: 0px;
+  margin: 0px;  
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+#save {
+  font-size: 30px;
+}
+
+#footer button {
+  width: 49%;
+}
+
+input {
+  width: 100%;
+}
+
+.locationHolder {
+  display: flex;
+}
+
+textarea {
+  width: 100%;
+}
+
+#settingsList {
+  height: 687px;
+  overflow: auto;
+}
+
+.settings {
+  display: flex;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.settings input {
+  width: auto;
+}
+
+#setup {
+  background: none;
+}
+
+.settings label {
+  padding-right: 10px;
+}
+
+#panelsContainer {
+  display: none;
+}
+
+#header {
+  padding: 5px;
+}
+
+#header > span:nth-child(2) {
+  float: right;
+}
+
+.settingsPannel {
+  
+  transition: height 1s;
+}
+
+.settingsPannelExpanded {
+  height: 100%;
+}
+
+button > * {
+  pointer-events: none;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <script type='text/javascript'>
+        // In such way we connect ipcRenderer to our page.
+        window.ipcRenderer = require('electron').ipcRenderer;
+        // The ipcRenderer module provides a few methods so you can send events from the render process (web page) to the main process.
+      </script>      
+      <link rel="stylesheet" media="screen" href="../global.css" /> 
+      <link rel="stylesheet" media="screen" href="./styles.css" />
+      <title>Syncolarity - Settings</title>
+      <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384-EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
+    </head>
+    <body>
+      <div id="panelsContainer">
+          <div class='settingsPannel'>
+              <div class='settings header'>
+                <button title="Remove Sync setting."><i unselectabe=true class="fas fa-window-close"></i></button>
+                <input type="checkbox" id="opt-a"><label for="Archive">Archive</label>
+                <input type="checkbox" id="opt-u"><label for="Update">Update</label>
+                <input type="checkbox" id="opt-z"><label for="Compress">Compress</label>
+                <input type="checkbox" id="opt-progress"><label for="Permissions">Permissions</label>
+                <input type="checkbox" id="opt-delete"><label for="Permissions">Delete</label>
+                <input type="checkbox" id="autosync"><label for="Autosync">Sync interval <input type="text" id="interval" placeholder="seconds"/>sec.</label>
+              </div>
+              <input type="text" id="title" placeholder="title">  
+              <div class="locationHolder">
+                <input type="textarea" id="sync-folder" placeholder="local file location"><button title="Select sync folder" id="select-sync-folder"><i class="far fa-folder-open"></i></button><br>
+              </div>          
+              <input type="text" id="remote-server" placeholder="remote location">        
+              <textarea rows=10 id="exclusion-list" placeholder="ignore list. Add each ignored file type on a new line"></textarea>
+            </div>
+      </div>
+
+      <div id="header"><span>Settings</span><span><button title="Add new sync config" onclick="addNewSettingsPanel()"><i class="fas fa-plus-circle"></i></button></span></div>
+      <div id='settingsList'></div>
+      
+      <button id="save" title="Save changes"><i class="fas fa-check"></i></button>
+      
+      <script src="window.js"></script>
+    </body>
+  </html>

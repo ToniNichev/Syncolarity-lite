@@ -1,0 +1,32 @@
+#log {
+  font-size: 12px;
+}
+
+#log important {
+    color: red;
+    display:block;
+}
+
+#log error {
+  color: red;
+  display:block;
+  border-bottom: 1px solid red;
+  padding-bottom: 5px;
+}
+
+
+#log header {
+  border-top: 1px solid #2b2b7b;
+  border-bottom: 1px solid #2b2b7b;
+  color: #2b2b7b;
+  padding: 5px;
+  font-weight: 500;
+  display:block;  
+}
+
+#log footer {
+  border-top: 1px solid green;
+  color: green;
+  font-weight: 500; 
+  display:block;  
+}
