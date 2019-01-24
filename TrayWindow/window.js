@@ -143,7 +143,7 @@ function coutdownBeforeSync() {
   startupCountdownTimer = setTimeout( () => {
     document.querySelector('#ModalWin > div > p > button > p:nth-child(1)').innerHTML = startupCountdown + ' sec.';
     startupCountdown --;
-    if(startupCountdown > 0) {
+    if(startupCountdown > -1) {
       coutdownBeforeSync();
     }
     else {
