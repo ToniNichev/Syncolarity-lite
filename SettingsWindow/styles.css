@@ -73,9 +73,13 @@ textarea {
   float: right;
 }
 
-.settingsPannel {
-  
-  transition: height 1s;
+#settingsList > .settingsPannelTransparent {
+  opacity: 0.1;
+}
+
+.settingsPannel {  
+  opacity: 1;
+  transition: all 1s;  
 }
 
 .settingsPannelExpanded {

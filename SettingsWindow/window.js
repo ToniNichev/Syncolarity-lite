@@ -69,7 +69,7 @@ function addNewSettingsPanel() {
   var last = document.querySelectorAll('#settingsList .settingsPannel').length;  
   var element = document.createElement('div');
   element.innerHTML = document.querySelector('#panelsContainer > .settingsPannel').innerHTML;
-  element.setAttribute('class', 'settingsPannel');
+  element.setAttribute('class', 'settingsPannel settingsPannelTransparent');
   element.setAttribute('key', last);
   document.querySelector("#settingsList").appendChild(element);
   addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
@@ -78,6 +78,8 @@ function addNewSettingsPanel() {
     var child = e.target.parentElement.parentElement;
     document.querySelector('#settingsList').removeChild( child );  
   }); 
+  document.querySelector('#settingsList').scrollTo(0,document.querySelector('#settingsList').scrollHeight); 
+  document.querySelector('.settingsPannel.settingsPannelTransparent').classList.remove('settingsPannelTransparent');
 }
 
 /**
