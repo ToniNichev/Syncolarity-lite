@@ -147,3 +147,6 @@ statusError {
   height: 100%;
 }
 
+#ModalWin > div {
+  text-align: center;
+}

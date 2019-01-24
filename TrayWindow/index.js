@@ -1,6 +1,5 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 
-
 class TrayWindow {
 
   constructor(appSettings) {
@@ -35,6 +34,8 @@ class TrayWindow {
     this.window.on('ready-to-show', () => {
       // pass the app settings to the renderer process
       this.window.webContents.send('ready-to-show', appSettings);
+      
+      this.window.show();
     });
 
     ipcMain.on('update-notify-value', (event, arg) => {

@@ -3,28 +3,13 @@ const ipc = require('electron').ipcRenderer;
 //const AppSettings = require('../AppSettings');
 const rsyncFactory = require('../rsyncFactory');
 
-
-
 let _appSettings = null;
 let notif = null;
 let syncTime = [];
 let syncTimeoutIds = [];
 let configChanged = false;
-
-function sendNotification(title, message, mainProcessNotificationType) {
-
-  // shows notification panel
-  notif = new window.Notification( title, {
-    body: message
-  });
-
-  // send notification to the main process if needed
-  if(mainProcessNotificationType != null) {
-    notif.onclick = function () {
-      window.ipcRenderer.send(mainProcessNotificationType);
-    }
-  }
-}
+let startupCountdown = 5;
+let startupCountdownTimer = null;
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
   mode = 'PULL';
@@ -63,7 +48,6 @@ function startSync(id) {
           if(rsyncFactory.getStartedSyncIds().length == 0) {
             alert("Sync completed!");
             configChanged = false;
-            //startTimeBasedSync();
           }
           return;
         }
@@ -88,11 +72,6 @@ function startSync(id) {
 
 // When config updates, or loads do these:
 function startTimeBasedSync() {
-
-  rsyncFactory.loadConfig();
-  // draw sync panels
-  document.querySelector('#settingsList').innerHTML = returnPanels(_appSettings.config.syncConfigs.length);
-
   // set up time based sync for each config.
   setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {     
@@ -100,9 +79,13 @@ function startTimeBasedSync() {
         startSync(id);
       }
     });
-  }, 1000);
+  }, 1000); 
+}
 
 
+function setupSyncPanels() {
+  // draw sync panels
+  document.querySelector('#settingsList').innerHTML = returnPanels(_appSettings.config.syncConfigs.length);
   var co = 0;
   _appSettings.config.syncConfigs.map((config, id) => {  
 
@@ -128,10 +111,8 @@ function startTimeBasedSync() {
       document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
     }      
     co ++;
-  });
- 
+  });  
 }
-
 
 function returnPanels(numberPanels) {
   let html = '';
@@ -158,13 +139,37 @@ document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
 });
 
+function coutdownBeforeSync() {
+  startupCountdownTimer = setTimeout( () => {
+    document.querySelector('#ModalWin > div > p > button > p:nth-child(1)').innerHTML = startupCountdown + ' sec.';
+    startupCountdown --;
+    if(startupCountdown > 0) {
+      coutdownBeforeSync();
+    }
+    else {
+      // start sync
+      startTimeBasedSync();
+      dismissModal();
+    }
+  },1000);
+}
+
 /**
  * Messages with the background process.
  */
 
 ipc.on('ready-to-show', (event, payload) => {
+  // fires once when app is ready to start sync.
   _appSettings = payload;
-  startTimeBasedSync();
+  //startTimeBasedSync();
+  rsyncFactory.loadConfig();
+  setupSyncPanels();
+  showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
+  document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
+    clearInterval(startupCountdownTimer);
+    dismissModal();
+  });
+  coutdownBeforeSync();
 });
 
 ipc.on('show', (event, payload) => {
