@@ -8,7 +8,7 @@ let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = false;
+let devMode = true;
   
 app.on('ready', function() {
   appSettings = new AppSettings(() => {  
