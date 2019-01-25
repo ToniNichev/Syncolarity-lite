@@ -69,7 +69,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
     }
   }, function(stdOutChunk){
     body += stdOutChunk;
-    addToLogWindow(id, stdOutChunk.toString(), onCompleteFuncs[id]);
+    addToLogWindow(id, stdOutChunk.toString() + "/n", onCompleteFuncs[id]);
   });
 }
 

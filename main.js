@@ -8,10 +8,11 @@ let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
+let devMode = false;
   
 app.on('ready', function() {
   appSettings = new AppSettings(() => {  
-    appSettings.test.push("one");
+    appSettings.devMode = devMode;
     trayWindow = new TrayWindow(appSettings);
     trayIcon = new TrayIcon(trayWindow.window);
     settingsWindow = new SettingsWindow(appSettings);

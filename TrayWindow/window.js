@@ -1,6 +1,5 @@
 const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
-//const AppSettings = require('../AppSettings');
 const rsyncFactory = require('../rsyncFactory');
 
 let _appSettings = null;
