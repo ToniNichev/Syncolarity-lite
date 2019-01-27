@@ -1,13 +1,15 @@
 const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const rsyncFactory = require('../rsyncFactory');
+ 
+const STARTUP_COUNTDOWN_TIMER = 5;
 
 let _appSettings = null;
 let notif = null;
 let syncTime = [];
 let syncTimeoutIds = [];
 let configChanged = false;
-let startupCountdown = 5;
+let startupCountdown = STARTUP_COUNTDOWN_TIMER;
 let startupCountdownTimer = null;
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
@@ -67,13 +69,14 @@ function startSync(id) {
   rsyncFactory.rsyncConfigId(id, 'push', function() {    
     setTimeout( () => { 
       pullRequest(id); 
-    }, 500);
+    }, 10);
   });
 }
 
 // When config updates, or loads do these:
 function startTimeBasedSync() {
   // set up time based sync for each config.
+  startupCountdown = STARTUP_COUNTDOWN_TIMER;
   setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {     
       if(element.autosync && !rsyncFactory.getStartedSyncIds().includes(id) ) {
@@ -160,6 +163,8 @@ function initApp(appSettings) {
   if(appSettings != null)
     _appSettings = appSettings;
   rsyncFactory.loadConfig();
+  startupCountdown = STARTUP_COUNTDOWN_TIMER;
+  console.log("!!!!!!!!!!!!!: ", STARTUP_COUNTDOWN_TIMER);
   setupSyncPanels();
   showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
   document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
@@ -187,8 +192,9 @@ ipc.send('update-notify-value', 123);
 
 
 ipc.on('save-config-notify', (event, appSettings) => {
-  debugger;
   configChanged = true; 
+  console.log(">>>>", appSettings);
+  debugger;
   syncTimeoutIds.map( (timeoutId, id) => {
     clearTimeout(syncTimeoutIds[id]);   
   });

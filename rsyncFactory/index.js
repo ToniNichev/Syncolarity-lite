@@ -4,6 +4,7 @@ var startedSyncIds = [];
 var disableLogScroll = false;
 var lastSyncStatus = [];
 var onCompleteFuncs = [];
+var firstTimeSync = true;
 
 function loadConfig() {
   appSettings = new AppSettings(function() {
@@ -46,8 +47,10 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
     
   if(opt) {
     Object.keys(opt).forEach(function(key,index) {
-      if(opt[key])
-        rsync.set(key);
+      if(opt[key]) {
+        if(firstTimeSync && key !== "delete" )
+          rsync.set(key);
+      }
     });    
   }
 
@@ -70,6 +73,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   }, function(stdOutChunk){
     body += stdOutChunk;
     addToLogWindow(id, stdOutChunk.toString() + "<br>", onCompleteFuncs[id]);
+    firstTimeSync = false;
   });
 }
 
