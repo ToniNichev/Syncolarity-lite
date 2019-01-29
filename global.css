@@ -70,3 +70,8 @@ button:hover {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* prevents setting up wrong target when clicking on button icon inside a button */
+button > * {
+  pointer-events: none;
+}

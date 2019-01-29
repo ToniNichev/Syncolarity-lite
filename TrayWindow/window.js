@@ -5,12 +5,13 @@ const rsyncFactory = require('../rsyncFactory');
 const STARTUP_COUNTDOWN_TIMER = 2;
 
 let _appSettings = null;
-let notif = null;
 let syncTime = [];
 let syncTimeoutIds = [];
 let configChanged = false;
 let startupCountdown = STARTUP_COUNTDOWN_TIMER;
 let startupCountdownTimer = null;
+let isPausedChanged = false;
+let paused = false;
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
   mode = 'PULL';
@@ -40,14 +41,13 @@ function startSync(id) {
       // sync complete
       const sec = (new Date() - syncTime[id]) / 1000;
       if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
-        console.log("eligable for re-sync");
         // eligable for re-sync
         startSync(id);
       }
       else {
-        if(configChanged) {
+        if(configChanged || isPausedChanged) {
           if(rsyncFactory.getStartedSyncIds().length == 0) {
-            configChangedActions(null);
+            configChangedActions();
           }
           return;
         }
@@ -141,8 +141,15 @@ document.getElementById("setup").addEventListener("click", function (e) {
 });
 
 document.getElementById("pause").addEventListener("click", function (e) {
-  //window.ipcRenderer.send('request-showing-of-settting-window');
-  alert("!");
+  if(paused === true) {
+    e.target.innerHTML = '<i class="fas fa-play"></i>';        
+    paused = true;
+  }
+  else {
+    e.target.innerHTML = '<i class="fas fa-pause"></i>';
+    paused = false;
+  }
+  initApp();
 });
 
 function coutdownBeforeSync() {
@@ -161,7 +168,6 @@ function coutdownBeforeSync() {
 }
 
 function initApp() {
-  debugger;
   rsyncFactory.loadConfig(_appSettings);
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
   configChanged = false;
@@ -169,14 +175,19 @@ function initApp() {
   showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
   document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
     clearInterval(startupCountdownTimer);
+    paused = true;
     dismissModal();
   });
   coutdownBeforeSync();  
 }
 
 function configChangedActions() {
-  alert("Detected config changes!");
-  debugger;
+  if(isPausedChanged) {
+    isPausedChanged = false;
+  }
+  else {
+    alert("Detected config changes!");
+  }
   initApp();
 }
 
@@ -188,7 +199,6 @@ ipc.on('ready-to-show', (event, appSettings) => {
   // fires once when app is ready to start sync.
   _appSettings = appSettings;
   setTimeout( () => {
-    debugger;
   initApp();
 }, 500);
 });
@@ -199,8 +209,7 @@ ipc.on('show', (event, payload) => {
 });
 
 ipc.on('save-config-notify', (event, newAppConfig) => {
-  
-  debugger;
+
   _appSettings = newAppConfig;
   // set this up 
   configChanged = true;

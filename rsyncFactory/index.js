@@ -7,13 +7,7 @@ var onCompleteFuncs = [];
 var firstTimeSync = true;
 
 function loadConfig(config) {
-  debugger;
   _config = config.config.syncConfigs;
-  /*
-  appSettings = new AppSettings(function() {
-    _config = appSettings.config.syncConfigs;
-  });
-  */  
 }
 
 function rsyncAll() {
