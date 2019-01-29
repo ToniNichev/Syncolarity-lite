@@ -36,7 +36,7 @@ class SettingsWindow {
 
     // save window clicked
     ipcMain.on('save-config-notify', function (event, appSettingsConfig) {
-      appSettings.saveSettings(appSettingsConfig);
+      appSettings.saveSettings(appSettingsConfig.config.syncConfigs);
     })    
   }
 

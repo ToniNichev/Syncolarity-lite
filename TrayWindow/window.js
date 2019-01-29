@@ -2,7 +2,7 @@ const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const rsyncFactory = require('../rsyncFactory');
  
-const STARTUP_COUNTDOWN_TIMER = 5;
+const STARTUP_COUNTDOWN_TIMER = 2;
 
 let _appSettings = null;
 let notif = null;
@@ -143,6 +143,11 @@ document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
 });
 
+document.getElementById("pause").addEventListener("click", function (e) {
+  //window.ipcRenderer.send('request-showing-of-settting-window');
+  alert("!");
+});
+
 function coutdownBeforeSync() {
   startupCountdownTimer = setTimeout( () => {
     document.querySelector('#ModalWin > div > p > button > p:nth-child(1)').innerHTML = startupCountdown + ' sec.';
@@ -160,6 +165,7 @@ function coutdownBeforeSync() {
 
 
 function initApp(appSettings) {
+  debugger;
   if(appSettings != null)
     _appSettings = appSettings;
   rsyncFactory.loadConfig();
@@ -191,16 +197,16 @@ ipc.on('show', (event, payload) => {
 ipc.send('update-notify-value', 123);
 
 
-ipc.on('save-config-notify', (event, appSettings) => {
+ipc.on('save-config-notify', (event, newAppConfig) => {
   configChanged = true; 
-  console.log(">>>>", appSettings);
-  debugger;
+  console.log("newAppConfig >>>>", newAppConfig);
+  // disable any ferther sync jobs.
   syncTimeoutIds.map( (timeoutId, id) => {
     clearTimeout(syncTimeoutIds[id]);   
   });
   syncTimeoutIds = [];
   if(rsyncFactory.getStartedSyncIds().length == 0) {
     alert("Detected config changes!");
-    initApp(appSettings);
+    initApp(newAppConfig);
   }
 });

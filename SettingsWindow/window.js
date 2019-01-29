@@ -90,7 +90,7 @@ document.getElementById("save").addEventListener("click", function (e) {
   var appSettingsConfig = [];
   var len = document.querySelectorAll('#settingsList .settingsPannel').length;
   for(var co = 0; co < len ;co ++) {
-    var config = {};
+    var config = {"TEST" : "55555555555555"};
     config.syncFolder = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value;    
     config.title = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#title').value; 
     config.serverUrl = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value; 
@@ -106,7 +106,8 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.opt.delete = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-delete').checked;
     appSettingsConfig.push(config);
   }  
-  ipc.send('save-config-notify', appSettingsConfig);
+  _appSettings.config.syncConfigs = appSettingsConfig;
+  ipc.send('save-config-notify', _appSettings);
 });
 
 

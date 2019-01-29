@@ -36,9 +36,9 @@ class TrayWindow {
     });
 
     // save window clicked
-    ipcMain.on('save-config-notify', (event, appSettingsConfig) => {
-      console.log(":::::::::::: save-config-notify");
-      this.window.webContents.send('save-config-notify', appSettings);
+    ipcMain.on('save-config-notify', (event, newConfig) => {
+      console.log(">>>> save-config-notify", newConfig);
+      this.window.webContents.send('save-config-notify', newConfig);
     })      
 
   }

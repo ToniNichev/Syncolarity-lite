@@ -85,7 +85,7 @@ input {
   display: flex;
 }
 
-#setup {
+#setup, #pause {
   background: none;
   border: none;
   cursor: pointer;
