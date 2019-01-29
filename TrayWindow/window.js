@@ -47,10 +47,7 @@ function startSync(id) {
       else {
         if(configChanged) {
           if(rsyncFactory.getStartedSyncIds().length == 0) {
-            alert("Sync completed! Detected config changes.");
-            configChanged = false;
-            // init the app with config = null since the config was already updated.
-            initApp(null);
+            configChangedActions(null);
           }
           return;
         }
@@ -102,12 +99,12 @@ function setupSyncPanels() {
     // push button
     document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) {         
       var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
-      rsyncFactory.rsyncConfigId(id, 'push');
+      rsyncFactory.rsyncConfigId(id, 'push', null, true);
     });
     // pull button
     document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-pull').addEventListener('click', function(e) {         
       var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
-      rsyncFactory.rsyncConfigId(id, 'pull');
+      rsyncFactory.rsyncConfigId(id, 'pull', null ,true);
     });
 
     // pulse active syncs 
@@ -163,14 +160,11 @@ function coutdownBeforeSync() {
   },1000);
 }
 
-
-function initApp(appSettings) {
+function initApp() {
   debugger;
-  if(appSettings != null)
-    _appSettings = appSettings;
-  rsyncFactory.loadConfig();
+  rsyncFactory.loadConfig(_appSettings);
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
-  console.log("!!!!!!!!!!!!!: ", STARTUP_COUNTDOWN_TIMER);
+  configChanged = false;
   setupSyncPanels();
   showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
   document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
@@ -180,13 +174,23 @@ function initApp(appSettings) {
   coutdownBeforeSync();  
 }
 
+function configChangedActions() {
+  alert("Detected config changes!");
+  debugger;
+  initApp();
+}
+
 /**
  * Messages with the background process.
  */
 
 ipc.on('ready-to-show', (event, appSettings) => {
   // fires once when app is ready to start sync.
-  initApp(appSettings);
+  _appSettings = appSettings;
+  setTimeout( () => {
+    debugger;
+  initApp();
+}, 500);
 });
 
 ipc.on('show', (event, payload) => {
@@ -194,19 +198,22 @@ ipc.on('show', (event, payload) => {
   console.log(payload);
 });
 
-ipc.send('update-notify-value', 123);
-
-
 ipc.on('save-config-notify', (event, newAppConfig) => {
-  configChanged = true; 
-  console.log("newAppConfig >>>>", newAppConfig);
+  
+  debugger;
+  _appSettings = newAppConfig;
+  // set this up 
+  configChanged = true;
   // disable any ferther sync jobs.
   syncTimeoutIds.map( (timeoutId, id) => {
     clearTimeout(syncTimeoutIds[id]);   
   });
   syncTimeoutIds = [];
   if(rsyncFactory.getStartedSyncIds().length == 0) {
-    alert("Detected config changes!");
-    initApp(newAppConfig);
+    // if there are no sync jobs, re-init app with the new config.
+    configChangedActions();
+  }
+  else {
+
   }
 });

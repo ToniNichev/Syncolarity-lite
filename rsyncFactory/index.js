@@ -6,10 +6,14 @@ var lastSyncStatus = [];
 var onCompleteFuncs = [];
 var firstTimeSync = true;
 
-function loadConfig() {
+function loadConfig(config) {
+  debugger;
+  _config = config.config.syncConfigs;
+  /*
   appSettings = new AppSettings(function() {
     _config = appSettings.config.syncConfigs;
-  });  
+  });
+  */  
 }
 
 function rsyncAll() {
@@ -20,7 +24,14 @@ function rsyncAll() {
   }
 }
 
-function rsyncConfigId(id, mode, onComplete) {
+/**
+ * Called when sync job is invoked
+ * @param {int} id sync job jd
+ * @param {string} mode - pull / push
+ * @param {cakkback} onComplete 
+ * @param {bool} ignoreFirstTimeSync the request is comming from button for example, we ignore the first time sync.
+ */
+function rsyncConfigId(id, mode, onComplete, ignoreFirstTimeSync) {
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
@@ -28,17 +39,15 @@ function rsyncConfigId(id, mode, onComplete) {
   }
 
   window.ipcRenderer.send('sync-started');
-console.log("##################################");
-
   startedSyncIds.push(id);
   var config = _config[id];
   if(mode == 'push')
-    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt);
+    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, ignoreFirstTimeSync);
   else
-    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt);  
+    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt, ignoreFirstTimeSync);  
 }
 
-function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
+function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTimeSync) {
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
@@ -48,7 +57,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   if(opt) {
     Object.keys(opt).forEach(function(key,index) {
       if(opt[key]) {
-        if(firstTimeSync && key !== "delete" )
+        if(firstTimeSync && key !== "delete" || ignoreFirstTimeSync )
           rsync.set(key);
       }
     });    
