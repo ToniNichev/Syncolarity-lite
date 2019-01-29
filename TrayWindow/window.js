@@ -141,14 +141,9 @@ document.getElementById("setup").addEventListener("click", function (e) {
 });
 
 document.getElementById("pause").addEventListener("click", function (e) {
-  if(paused === true) {
-    e.target.innerHTML = '<i class="fas fa-play"></i>';        
-    paused = true;
-  }
-  else {
-    e.target.innerHTML = '<i class="fas fa-pause"></i>';
-    paused = false;
-  }
+  paused = !paused;
+  e.target.innerHTML = paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+  debugger;
   initApp();
 });
 
@@ -184,6 +179,11 @@ function initApp() {
 function configChangedActions() {
   if(isPausedChanged) {
     isPausedChanged = false;
+    if(!paused) {
+      debugger;
+      startTimeBasedSync();
+      return;
+    }
   }
   else {
     alert("Detected config changes!");
