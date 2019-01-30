@@ -30,3 +30,10 @@
   font-weight: 500; 
   display:block;  
 }
+
+#log footer linebreak {
+  border-top: 1px solid green;
+  padding-bottom: 5px;
+  display: block;
+  margin-top: 5px;  
+}

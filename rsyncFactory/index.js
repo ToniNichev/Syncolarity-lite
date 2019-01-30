@@ -28,7 +28,7 @@ function rsyncAll() {
 function rsyncConfigId(id, mode, onComplete, ignoreFirstTimeSync) {
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
-    addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
+    addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
   }
 
@@ -63,7 +63,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTi
   const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
   const _date = new Date().toString();
   lastSyncStatus[id] = "<statusOK>" + m + _date + "</statusOK>";
-  addToLogWindow(id, "<header>" + m + " " +  title + " : " + _date + "</header>", onCompleteFuncs[id]);
+  addToLogWindow(id, mode, "<header>" + m + " " +  title + " : " + _date + "</header>", onCompleteFuncs[id]);
   document.querySelector(".controlPannel[key='" + id + "']").classList.add("pulse");    
   
   rsync.execute(function(error, code, cmd, onComplete) {
@@ -71,16 +71,17 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTi
       const m = '<i class="fas fa-exclamation-circle"></i>';
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
-      addToLogWindow(id, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onCompleteFuncs[id]);
+      addToLogWindow(id, mode, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onCompleteFuncs[id]);
     }
   }, function(stdOutChunk){
     body += stdOutChunk;
-    addToLogWindow(id, stdOutChunk.toString() + "<br>", onCompleteFuncs[id]);
+    var msg = stdOutChunk.toString();
+    addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
     firstTimeSync = false;
   });
 }
 
-function addToLogWindow(id, msg, onComplete) {
+function addToLogWindow(id, mode, msg, onComplete) {
   msg = msg.split("\n").join("<br>");
 
   // if sync completed, execute the code below.
@@ -94,8 +95,11 @@ function addToLogWindow(id, msg, onComplete) {
     var trayMsg = msg.split('total size');
     trayMsg = trayMsg[0].replace(/<br>/g, '');
     sendNotification('Sync complete!', trayMsg, 'request-showing-of-main-window', onComplete);
-    // footar and status notification msg
-    msg = '<footer>' + msg + '</footer><br><br>';
+    // footer and status notification msg
+    const title = _config[id].title;
+    const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
+    const _date = new Date().toString();
+    msg = '<footer>' + m + ' ' + title + ' complete! ' +  _date + "<linebreak />" + msg + '</footer><br><br>';
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
     // remove pannel pulse
     document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse"); 
