@@ -38,8 +38,7 @@ function startSync(id) {
   
   function pullRequest(id) {
     rsyncFactory.rsyncConfigId(id, 'pull', function() {
-      // sync complete
-      //debugger;
+      // when sync is complete
       const sec = (new Date() - syncTime[id]) / 1000;
       if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         // eligable for re-sync
@@ -48,6 +47,7 @@ function startSync(id) {
       else {
         if(configChanged || isPausedChanged) {          
           if(rsyncFactory.getStartedSyncIds().length == 0) {
+            debugger;
             configChangedActions();
           }
           return;
@@ -62,6 +62,8 @@ function startSync(id) {
     });
   }
 
+  if(paused == true)
+    return;
   syncTime[id] = new Date();
   // do the pull request, wait 1/2 sec and request pull sync
   rsyncFactory.rsyncConfigId(id, 'push', function() {    
@@ -141,13 +143,10 @@ document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
 });
 
-/**
- * Play / Pause
- */
+// Play / Pause button
 document.getElementById("pause").addEventListener("click", function (e) {
   paused = !paused;
   isPausedChanged = paused;
-  debugger;
   e.target.innerHTML = !paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
   if(!paused) {
     startTimeBasedSync();
