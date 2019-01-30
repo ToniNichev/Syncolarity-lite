@@ -39,13 +39,14 @@ function startSync(id) {
   function pullRequest(id) {
     rsyncFactory.rsyncConfigId(id, 'pull', function() {
       // sync complete
+      //debugger;
       const sec = (new Date() - syncTime[id]) / 1000;
       if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         // eligable for re-sync
         startSync(id);
       }
       else {
-        if(configChanged || isPausedChanged) {
+        if(configChanged || isPausedChanged) {          
           if(rsyncFactory.getStartedSyncIds().length == 0) {
             configChangedActions();
           }
@@ -140,11 +141,17 @@ document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
 });
 
+/**
+ * Play / Pause
+ */
 document.getElementById("pause").addEventListener("click", function (e) {
   paused = !paused;
-  e.target.innerHTML = paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+  isPausedChanged = paused;
   debugger;
-  initApp();
+  e.target.innerHTML = !paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+  if(!paused) {
+    startTimeBasedSync();
+  }
 });
 
 function coutdownBeforeSync() {
@@ -166,11 +173,14 @@ function initApp() {
   rsyncFactory.loadConfig(_appSettings);
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
   configChanged = false;
+  //debugger;
+  if(paused) {
+    return;
+  }
   setupSyncPanels();
   showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
   document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
     clearInterval(startupCountdownTimer);
-    paused = true;
     dismissModal();
   });
   coutdownBeforeSync();  
@@ -180,7 +190,6 @@ function configChangedActions() {
   if(isPausedChanged) {
     isPausedChanged = false;
     if(!paused) {
-      debugger;
       startTimeBasedSync();
       return;
     }
