@@ -47,7 +47,6 @@ function startSync(id) {
       else {
         if(configChanged || isPausedChanged) {          
           if(rsyncFactory.getStartedSyncIds().length == 0) {
-            debugger;
             configChangedActions();
           }
           return;
@@ -172,7 +171,6 @@ function initApp() {
   rsyncFactory.loadConfig(_appSettings);
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
   configChanged = false;
-  //debugger;
   if(paused) {
     return;
   }
