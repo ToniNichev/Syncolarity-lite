@@ -14,12 +14,11 @@ let isPausedChanged = false;
 let paused = false;
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
-  mode = 'PULL';
-  rsyncFactory.rsyncRequest(_appSettings.serverUrl, _appSettings.syncFolder, prepareExcludeList(_appSettings.exclusions));
+  rsyncFactory.rsyncAll('pull');
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
-  rsyncFactory.rsyncAll();
+  rsyncFactory.rsyncAll('push');
 });
 
 function prepareExcludeList(rawList) {
@@ -148,7 +147,17 @@ document.getElementById("pause").addEventListener("click", function (e) {
   isPausedChanged = paused;
   e.target.innerHTML = !paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
   if(!paused) {
+    showModal('<p>Sync started.</p>', 5);
     startTimeBasedSync();
+    document.querySelector('body').classList.remove('syncPaused');
+  }
+  else {
+    document.querySelector('body').classList.add('syncPaused');
+    if(rsyncFactory.getStartedSyncIds().length === 0)
+      showModal('<p>Sync paused.</p>', 3);      
+    else
+      showModal('<p>Sync will pause, after finishing the remaining sync jobs.</p>', 5);
+      
   }
 });
 

@@ -10,11 +10,10 @@ function loadConfig(config) {
   _config = config.config.syncConfigs;
 }
 
-function rsyncAll() {
+function rsyncAll(mode) {
   for(var q=0;q <  _config.length; q++) {
     var config = _config[q];
-    this.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), 'push', config.opt );
-    this.rsyncRequest(config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), 'pull', config.opt );
+    this.rsyncConfigId(q, mode, null ,true);
   }
 }
 

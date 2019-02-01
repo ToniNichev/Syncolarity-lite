@@ -150,3 +150,7 @@ statusError {
 #ModalWin > div {
   text-align: center;
 }
+
+.syncPaused {
+  background: white;
+}
