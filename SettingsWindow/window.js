@@ -132,6 +132,5 @@ ipc.on('ready-to-show', (event, payload) => {
 });
 
 ipc.on('show', (event, payload) => {
-  alert("!");
   console.log(payload);
 });

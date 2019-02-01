@@ -14,7 +14,7 @@ class AppSettings {
     let filepath = this.filepath;
     fs.readFile(filepath, 'utf-8', (err, data) => {
       if(err){
-          alert("An error ocurred reading the file :" + err.message);
+          //alert("An error ocurred reading the file :" + err.message);
           return;
       }    
 

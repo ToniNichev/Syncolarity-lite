@@ -194,7 +194,9 @@ function configChangedActions() {
     }
   }
   else {
-    alert("Detected config changes!");
+    showModal('Detected config changes! Restarting sync jobs ....');
+    debugger;
+    setTimeout( () => { dismissModal() }, 2000);
   }
   initApp();
 }
@@ -212,7 +214,6 @@ ipc.on('ready-to-show', (event, appSettings) => {
 });
 
 ipc.on('show', (event, payload) => {
-  alert("!");
   console.log(payload);
 });
 
