@@ -5,7 +5,10 @@
 
   var close = document.createElement("span");
   close.className = "close";
-  close.innerHTML = "&times;";
+  close.innerHTML = '<i class="fas fa-times"></i>';
+  close.onclick = function() {
+    dismissModal();
+  }
 
   var contentDiv = document.createElement("div");
   contentDiv.className = "modal-content";
@@ -21,9 +24,12 @@
   document.body.appendChild(modal); 
 })();
 
-function showModal(html) {
+function showModal(html, hideAfter) {
   document.querySelector('#ModalWin > div > p').innerHTML = html;  
   document.querySelector('#ModalWin').style.display = 'block';
+  if(hideAfter) {
+    setTimeout( () => { dismissModal() }, +hideAfter * 1000 );
+  }
 }
 
 function dismissModal() {

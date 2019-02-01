@@ -10,11 +10,10 @@ function loadConfig(config) {
   _config = config.config.syncConfigs;
 }
 
-function rsyncAll() {
+function rsyncAll(mode) {
   for(var q=0;q <  _config.length; q++) {
     var config = _config[q];
-    this.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), 'push', config.opt );
-    this.rsyncRequest(config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), 'pull', config.opt );
+    this.rsyncConfigId(q, mode, null ,true);
   }
 }
 
@@ -72,12 +71,16 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTi
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
       addToLogWindow(id, mode, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onCompleteFuncs[id]);
+      // disable tray icon animation, and pulse of the panel
+      syncJobCompleted(id);      
     }
   }, function(stdOutChunk){
-    body += stdOutChunk;
-    var msg = stdOutChunk.toString();
-    addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
-    firstTimeSync = false;
+      body += stdOutChunk;
+      var msg = stdOutChunk.toString();
+      addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
+      firstTimeSync = false;
+      // disable tray icon animation, and pulse of the panel
+      //syncJobCompleted(id);
   });
 }
 
@@ -87,10 +90,9 @@ function addToLogWindow(id, mode, msg, onComplete) {
   // if sync completed, execute the code below.
   if(msg.includes('<br>total size is')) {    
     // remove startedSyncIds
-    removeStartedSyncId(id);      
-    // disable tray icon animation
-    if(startedSyncIds.length == 0)
-      window.ipcRenderer.send('sync-stopped');
+    removeStartedSyncId(id);          
+    // disable tray icon animation, and pulse of the panel
+    syncJobCompleted(id);
     // tray notification
     var trayMsg = msg.split('total size');
     trayMsg = trayMsg[0].replace(/<br>/g, '');
@@ -101,8 +103,6 @@ function addToLogWindow(id, mode, msg, onComplete) {
     const _date = new Date().toString();
     msg = '<footer>' + m + ' ' + title + ' complete! ' +  _date + "<linebreak />" + msg + '</footer><br><br>';
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
-    // remove pannel pulse
-    document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse"); 
   } 
 
   let log = document.getElementById("log").innerHTML;  
@@ -151,6 +151,14 @@ function _getStartedSyncIds() {
 
 function _getLastSyncStatus(id) {
   return lastSyncStatus[id] || "";
+}
+
+function syncJobCompleted(id) {
+  // remove pannel pulse
+  document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse");       
+  // disable tray icon animation
+  if(startedSyncIds.length == 0)
+    window.ipcRenderer.send('sync-stopped');      
 }
 
 module.exports =  {

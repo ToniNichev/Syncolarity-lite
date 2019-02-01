@@ -10,7 +10,6 @@ body {
     overflow: hidden;
 }
 
-
 button {
     cursor: pointer;
     transition: background-color, color 350ms linear;
@@ -45,6 +44,7 @@ button:hover {
   overflow: auto;
   background-color: rgb(0,0,0); 
   background-color: rgba(0,0,0,0.4); 
+  transition: all 350ms linear;
 }
 
 /* Modal Content/Box */
