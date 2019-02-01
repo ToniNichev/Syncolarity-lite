@@ -1,5 +1,6 @@
 {
   "name": "src",
+  "productName": "Electron tutorial app",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -12,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^3.0.7",
+    "electron-packager": "^13.0.1",
     "electron-positioner": "^4.1.0"
   },
   "dependencies": {
