@@ -2,7 +2,7 @@ const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const rsyncFactory = require('../rsyncFactory');
  
-const STARTUP_COUNTDOWN_TIMER = 2;
+const STARTUP_COUNTDOWN_TIMER = 5;
 
 let _appSettings = null;
 let syncTime = [];
@@ -154,7 +154,7 @@ document.getElementById("pause").addEventListener("click", function (e) {
   else {
     document.querySelector('body').classList.add('syncPaused');
     if(rsyncFactory.getStartedSyncIds().length === 0)
-      showModal('<p>Sync paused.</p>', 3);      
+      showModal('<p>Sync paused.</p>', 13);      
     else
       showModal('<p>Sync will pause, after finishing the remaining sync jobs.</p>', 5);
       

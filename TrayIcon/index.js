@@ -1,5 +1,6 @@
 const { BrowserWindow, Tray } = require('electron');
 const Positioner = require('electron-positioner');
+const path = require('path');
 
 class TrayIcon {  
   constructor(trayWindow) {
@@ -20,7 +21,8 @@ class TrayIcon {
     if(typeof this.trayIcon != 'undefined')
       this.trayIcon.destroy();
     this.iconId = this.iconId > 6 ? 1 : this.iconId;
-    this.trayIcon = new Tray('./icons/tray-icon-' + this.iconId + '.png');
+    const filepath = path.join(__dirname, '/../icons/tray-icon-' + this.iconId + '.png');    
+    this.trayIcon = new Tray(filepath);
     this.iconId++;
 
     this.trayIcon.setToolTip('Syncolarity'); 

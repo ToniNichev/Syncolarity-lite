@@ -19,6 +19,7 @@ app.on('ready', function() {
   });
 });
 
+
 app.on('quit-app', function() {
   tray.window.close();
   app.quit();

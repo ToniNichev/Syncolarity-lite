@@ -1,10 +1,10 @@
 const fs = require('fs');
+const path = require('path');
 class AppSettings {
 
   constructor(callback) {
     this.test = [];
-
-    this.filepath = './settings/app-settings.json';    
+    this.filepath = path.join(__dirname, '/../settings/app-settings.json');    
     this.callback = callback;
     this.loadSettings();
 
@@ -14,7 +14,7 @@ class AppSettings {
     let filepath = this.filepath;
     fs.readFile(filepath, 'utf-8', (err, data) => {
       if(err){
-          //alert("An error ocurred reading the file :" + err.message);
+          console.log("Error loading settings!");
           return;
       }    
 
