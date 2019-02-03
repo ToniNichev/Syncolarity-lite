@@ -80,7 +80,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTi
       addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
       firstTimeSync = false;
       // disable tray icon animation, and pulse of the panel
-      //syncJobCompleted(id);
+      syncJobCompleted(id);
   });
 }
 
@@ -154,6 +154,8 @@ function _getLastSyncStatus(id) {
 }
 
 function syncJobCompleted(id) {
+  if(rsyncFactory.getStartedSyncIds().includes(id))
+    return;
   // remove pannel pulse
   document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse");       
   // disable tray icon animation
