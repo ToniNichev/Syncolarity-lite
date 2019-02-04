@@ -29,7 +29,7 @@ input {
   width: 100%;
 }
 
-.locationHolder {
+.locationHolder, .serverFolder {
   display: flex;
 }
 

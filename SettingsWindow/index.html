@@ -26,9 +26,13 @@
               </div>
               <input type="text" id="title" placeholder="title">  
               <div class="locationHolder">
-                <input type="textarea" id="sync-folder" placeholder="local file location"><button title="Select sync folder" id="select-sync-folder"><i class="far fa-folder-open"></i></button><br>
+                <input type="textarea" id="sync-folder" placeholder="local file location">
+                <button title="Select sync folder" id="select-sync-folder"><i class="far fa-folder-open"></i></button>
               </div>          
-              <input type="text" id="remote-server" placeholder="remote location">        
+              <div class="serverFolder">
+                <input type="text" id="remote-server" placeholder="remote location">        
+                <button title="Select remote folder" id="select-server-folder"><i class="far fa-folder-open"></i></button>
+              </div>
               <textarea rows=10 id="exclusion-list" placeholder="ignore list. Add each ignored file type on a new line"></textarea>
             </div>
       </div>
@@ -39,5 +43,6 @@
       <button id="save" title="Save changes"><i class="fas fa-check"></i></button>
       
       <script src="window.js"></script>
+      <script src="../global.js"></script>
     </body>
   </html>

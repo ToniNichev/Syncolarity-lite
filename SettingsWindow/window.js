@@ -17,6 +17,7 @@ function init() {
 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value = config.syncFolder;    
     addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
+    addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.serverFolder #select-server-folder'));
 
     // remove sync pannel button
     document.querySelectorAll('#settingsList > .settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e) { 
@@ -58,7 +59,8 @@ function addOpenFolderLocation(e) {
     if (selection && selection[0]) {
       console.log('got Selection');
     }
-    e.currentTarget.parentElement.querySelector('#sync-folder').value = selection[0];
+    debugger;
+    e.currentTarget.parentElement.querySelector('input').value = selection[0];
   });    
 }
 
@@ -73,6 +75,7 @@ function addNewSettingsPanel() {
   element.setAttribute('key', last);
   document.querySelector("#settingsList").appendChild(element);
   addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
+  addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.serverFolder #select-server-folder'));
   // remove sync pannel button
   document.querySelectorAll('#settingsList > .settingsPannel')[last].querySelector('.settings > button').addEventListener('click', function(e) { 
     var child = e.target.parentElement.parentElement;
@@ -108,6 +111,7 @@ document.getElementById("save").addEventListener("click", function (e) {
   }  
   _appSettings.config.syncConfigs = appSettingsConfig;
   ipc.send('save-config-notify', _appSettings);
+  showModal('Config saved! New setting will be applied after curent jobs are complete!', 5);
 });
 
 

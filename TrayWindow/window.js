@@ -202,7 +202,6 @@ function configChangedActions() {
   }
   else {
     showModal('Detected config changes! Restarting sync jobs ....');
-    debugger;
     setTimeout( () => { dismissModal() }, 2000);
   }
   initApp();
@@ -215,6 +214,7 @@ function configChangedActions() {
 ipc.on('ready-to-show', (event, appSettings) => {
   // fires once when app is ready to start sync.
   _appSettings = appSettings;
+  debugger;
   setTimeout( () => {
   initApp();
 }, 500);
