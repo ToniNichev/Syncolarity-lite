@@ -154,9 +154,9 @@ document.getElementById("pause").addEventListener("click", function (e) {
   else {
     document.querySelector('body').classList.add('syncPaused');
     if(rsyncFactory.getStartedSyncIds().length === 0)
-      showModal('<p>Sync paused.</p>', 13);      
+      showModal('<p>Sync paused.</p>', 3);      
     else
-      showModal('<p>Sync will pause, after finishing the remaining sync jobs.</p>', 5);
+      showModal('<p>Sync will pause, after finishing the remaining sync jobs.</p>', 3);
       
   }
 });
@@ -176,6 +176,19 @@ function coutdownBeforeSync() {
   },1000);
 }
 
+function initAppPartTwo() {
+  showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
+  document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
+    clearInterval(startupCountdownTimer);
+    paused = true;
+    //isPausedChanged = paused;
+    document.querySelector('#pause').innerHTML = '<i class="fas fa-pause"></i>';
+    document.querySelector('body').classList.add('syncPaused');    
+    dismissModal();
+  });
+  coutdownBeforeSync();    
+}
+
 function initApp() {
   rsyncFactory.loadConfig(_appSettings);
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
@@ -184,12 +197,29 @@ function initApp() {
     return;
   }
   setupSyncPanels();
-  showModal('<p>Authomatic sync is starting in</p><button><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
-  document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
-    clearInterval(startupCountdownTimer);
-    dismissModal();
-  });
-  coutdownBeforeSync();  
+
+  if(_appSettings.config.firstTimeRun==0) {
+    showModal(`
+      <firstTimeRun>
+      <h1>Thanks for using Syncolarity!</h1>
+      <hr>
+      On the top left:<br>
+      Use <i class="fas fa-cogs"></i> button to create new sync jobs.<br>
+      Use <i class="fas fa-play"></i> to pause/resume authomated sync jobs.<br>
+      <button onclick="
+        dismissModal();
+        document.querySelector('.close').style.display = 'block';
+        _appSettings.config.firstTimeRun = 1;
+        ipc.send('save-config-notify', _appSettings);
+        initAppPartTwo();
+        ">GOT IT!</button>
+      </firstTimeRun>
+    `);  
+    document.querySelector('.close').style.display = 'none';  
+  }
+  else {
+    initAppPartTwo();
+  }
 }
 
 function configChangedActions() {
@@ -201,8 +231,10 @@ function configChangedActions() {
     }
   }
   else {
+    //if(rsyncFactory.getStartedSyncIds().length == 0)
+   //   return;
     showModal('Detected config changes! Restarting sync jobs ....');
-    setTimeout( () => { dismissModal() }, 2000);
+    setTimeout( () => { dismissModal() }, 3);
   }
   initApp();
 }
@@ -214,10 +246,11 @@ function configChangedActions() {
 ipc.on('ready-to-show', (event, appSettings) => {
   // fires once when app is ready to start sync.
   _appSettings = appSettings;
-  debugger;
+
   setTimeout( () => {
-  initApp();
-}, 500);
+    initApp();
+  }, 500);
+
 });
 
 ipc.on('show', (event, payload) => {

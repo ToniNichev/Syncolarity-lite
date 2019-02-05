@@ -25,8 +25,10 @@ class AppSettings {
     });    
   }
 
-  saveSettings(appSettingsConfig) {    
-    this.config.syncConfigs = appSettingsConfig;
+  saveSettings(appSettingsConfig) {   
+    //this.config.syncConfigs = appSettingsConfig;
+    this.config = appSettingsConfig;
+    //this.config.firstTimeRun = 0;
     let filepath = this.filepath;
     let cfg = JSON.stringify(this.config);
     fs.writeFile(filepath, cfg,  function (err) {

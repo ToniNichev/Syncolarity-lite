@@ -87,21 +87,25 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTi
 function addToLogWindow(id, mode, msg, onComplete) {
   msg = msg.split("\n").join("<br>");
 
-  // if sync completed, execute the code below.
+  // if sync completed, execute the code below.  
   if(msg.includes('<br>total size is')) {    
     // remove startedSyncIds
     removeStartedSyncId(id);          
     // disable tray icon animation, and pulse of the panel
     syncJobCompleted(id);
     // tray notification
-    var trayMsg = msg.split('total size');
-    trayMsg = trayMsg[0].replace(/<br>/g, '');
-    sendNotification('Sync complete!', trayMsg, 'request-showing-of-main-window', onComplete);
+    //debugger;
+    var trayMsgParts = msg.split('<br>sent ');
+    if(trayMsgParts.length == 1)
+    trayMsgParts[1] = "";
+    let trayMsg = trayMsgParts[1].replace(/<br>/g, '');
+    let tryMsgTitle = trayMsgParts[1] == '' ? 'Error syncing ' +  _config[id].title + "!" : 'Sync ' +  _config[id].title + ' complete!';
+    sendNotification(tryMsgTitle, trayMsg, 'request-showing-of-main-window', onComplete);
     // footer and status notification msg
     const title = _config[id].title;
     const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
     const _date = new Date().toString();
-    msg = '<footer>' + m + ' ' + title + ' complete! ' +  _date + "<linebreak />" + msg + '</footer><br><br>';
+    msg = trayMsgParts[0] + '<footer>' + m + ' ' + title + ' complete! ' +  _date + "<linebreak />" + trayMsgParts[1] + '</footer><br><br>';
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
   } 
 

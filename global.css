@@ -76,3 +76,13 @@ button:hover {
 button > * {
   pointer-events: none;
 }
+
+firstTimeRun H1 {
+  color: #7f7ff5;
+}
+
+firstTimeRun button {
+  background: none;
+  border: none;
+  font-size: 20px;
+}
