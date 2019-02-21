@@ -3,13 +3,14 @@ const TrayWindow = require('./TrayWindow');
 const TrayIcon = require('./TrayIcon');
 const SettingsWindow = require('./SettingsWindow');
 const AppSettings = require('./AppSettings');
+const {autoUpdater} = require("electron-updater");
 
   
 let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = true;
+let devMode = false;
   
 app.on('ready', function() {
   appSettings = new AppSettings(() => {  
@@ -17,12 +18,10 @@ app.on('ready', function() {
     trayWindow = new TrayWindow(appSettings);
     trayIcon = new TrayIcon(trayWindow.window);
     settingsWindow = new SettingsWindow(appSettings);
+    setTimeout(() => {
+      autoUpdater.checkForUpdates();
+    }, 2000);    
   });
-
-  require('update-electron-app')({
-    repo: 'ToniNichev/Syncolarity-liteo',
-    updateInterval: '5 minute'
-  })  
 });
 
 
@@ -47,3 +46,14 @@ ipcMain.on('sync-stopped', function() {
   trayIcon.stopAnimation();  
 });
 
+
+
+// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
+autoUpdater.on('update-downloaded', (info) => {
+  trayWindow.webContents.send('updateReady')
+});
+
+// when receiving a quitAndInstall signal, quit and install the new version ;)
+ipcMain.on("quitAndInstall", (event, arg) => {
+  autoUpdater.quitAndInstall();
+})
