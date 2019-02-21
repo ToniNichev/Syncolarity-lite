@@ -111,7 +111,7 @@ document.getElementById("save").addEventListener("click", function (e) {
   }  
   _appSettings.config.syncConfigs = appSettingsConfig;
   ipc.send('save-config-notify', _appSettings);
-  showModal('Config saved! New settings will be applied after curent jobs are completed!', 5);
+  showModal('Config saved! New settings will be applied after curent jobs are completed or sync is unpoused!', 5);
 });
 
 

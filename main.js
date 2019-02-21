@@ -3,6 +3,7 @@ const TrayWindow = require('./TrayWindow');
 const TrayIcon = require('./TrayIcon');
 const SettingsWindow = require('./SettingsWindow');
 const AppSettings = require('./AppSettings');
+
   
 let trayWindow = null;
 let trayIcon = null;
@@ -17,6 +18,11 @@ app.on('ready', function() {
     trayIcon = new TrayIcon(trayWindow.window);
     settingsWindow = new SettingsWindow(appSettings);
   });
+
+  require('update-electron-app')({
+    repo: 'ToniNichev/Syncolarity-liteo',
+    updateInterval: '5 minute'
+  })  
 });
 
 
