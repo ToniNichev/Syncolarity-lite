@@ -1,17 +1,16 @@
 {
   "name": "src",
   "productName": "Syncolarity",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "main.js",
-  "repository": "https://github.com/ToniNichev/Syncolarity-lite",
   "scripts": {
-    "publish": "export GH_TOKEN=4a5641e8a4ae62f8246bbcc94e6402c43cb0bd6d && build -p always",    
+    "publish": "export GH_TOKEN=b2d30b98007325a0a52947eba963bfa0d5038dbc && build -p always",
     "start": "electron .",
     "debug": "electron . --debug",
     "pack:osx": "electron-packager . --overwrite --platform=darwin --arch=x64  --prune=true --ignore='^/release-builds$' --out=release-builds --icon=icons/icon.icns",
     "pack:win": "./node_modules/.bin/electron-packager . $npm_package_syncolarity --app-version=$npm_package_version --app-version=0.36.7 --out=builds --ignore='^/builds$' --platform=win32 --arch=ia32 --version-string.CompanyName='My Company Ltd' --version-string.LegalCopyright='Copyright (C) 2016 My Company Ltd' --version-string.FileDescription=$npm_package_productName --version-string.OriginalFilename='MyApp.exe' --version-string.InternalName=$npm_package_productName --version-string.ProductName=$npm_package_productName --version-string.ProductVersion=$npm_package_version --asar=true --icon=logo.ico --overwrite",
-    "build": "build --win",
+    "build123": "build --win",
     "ship": "build --win -p always"
   },
   "keywords": [],
@@ -24,7 +23,6 @@
   },
   "dependencies": {
     "electron-positioner": "^4.1.0",
-    "electron-publish": "^20.38.5",
     "electron-updater": "^4.0.6",
     "rsync": "^0.6.1"
   },

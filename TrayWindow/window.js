@@ -177,7 +177,7 @@ function coutdownBeforeSync() {
 }
 
 function initAppPartTwo() {
-  showModal('<p>Authomatic sync is starting in</p><button class="autoSyncCancel"><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
+  showModal('<p>(v1.0.3) Authomatic sync is starting in</p><button class="autoSyncCancel"><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
   document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
     clearInterval(startupCountdownTimer);
     paused = true;
