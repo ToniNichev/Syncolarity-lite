@@ -10,7 +10,7 @@ let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = false;
+let devMode = true;
   
 app.on('ready', function() {
   appSettings = new AppSettings(() => {  
@@ -19,7 +19,7 @@ app.on('ready', function() {
     trayIcon = new TrayIcon(trayWindow.window);
     settingsWindow = new SettingsWindow(appSettings);
     setTimeout(() => {
-      autoUpdater.checkForUpdates();
+      //autoUpdater.checkForUpdates();
     }, 2000);    
   });
 });

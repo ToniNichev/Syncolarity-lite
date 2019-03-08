@@ -29,8 +29,11 @@ function init() {
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value = config.serverUrl; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value = config.exclusions;
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#interval').value = config.interval;
-    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosync').checked = config.autosync;    
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosync').checked = config.autosync;   
+    var selectObj = config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
+    selectObj.selectedIndex = config.action; 
     // options
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #active').checked = config.active;    
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-a').checked = config.opt.a;
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-u').checked = config.opt.u;
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked = config.opt.z;
@@ -100,8 +103,11 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.exclusions = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value;
     config.interval = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#interval').value;
     config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosync').checked;    
+    var selectObj = config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
+    config.action = selectObj.selectedIndex;
     // options
     config.opt = {};
+    config.active = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #active').checked;
     config.opt.a = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-a').checked;
     config.opt.u = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-u').checked;
     config.opt.z = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked;
