@@ -41,7 +41,7 @@
 
 #settingsList button, #footer button {
   padding: 8px;
-  border-radius: 15px;
+  border-radius: 7px;
   margin-left: 10px;
   margin-right: 10px;
   font-size: 15px;
@@ -84,6 +84,7 @@ input {
   font-weight: 400;
   padding-right: 10px;
   width: 160px;
+  font-weight: 800;
 }
 
 #controls {
