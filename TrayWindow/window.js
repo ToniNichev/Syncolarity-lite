@@ -2,7 +2,7 @@ const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const rsyncFactory = require('../rsyncFactory');
  
-const STARTUP_COUNTDOWN_TIMER = 5;
+const STARTUP_COUNTDOWN_TIMER = 3;
 
 let _appSettings = null;
 let syncTime = [];
@@ -34,44 +34,49 @@ function prepareExcludeList(rawList) {
  * @param {*} id the id of the sync config
  */
 function startSync(id, syncPart) {
-  
-  function syncRequest(id) {
-    var actions = [ 'push' , 'pull' , 'push-pull' , 'pull-push'];
-    var executeActions = actions[id].split('-');
-    
-    rsyncFactory.rsyncConfigId(id, executeActions[syncPart], function() {
-      // when sync is complete
-      const sec = (new Date() - syncTime[id]) / 1000;
-      if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
-        // eligable for re-sync
-        startSync(id, 1);
-      }
-      else {
-        if(configChanged || isPausedChanged) {          
-          if(rsyncFactory.getStartedSyncIds().length == 0) {
-            configChangedActions();
-          }
-          return;
-        }
-        const remindingTime = Math.round( + _appSettings.config.syncConfigs[id].interval - sec);
-        console.log("check again in " + remindingTime + " sec.");
-        syncTimeoutIds[id] = setTimeout( () => {
-          // check again in `remindingTime` seconds.
-          startSync(id, 1);
-        }, remindingTime * 1000);
-      }
-    });
-  }
+
 
   if(paused == true)
-    return;
-  syncTime[id] = new Date();
-  // do the pull request, wait 1/2 sec and request pull sync
-  rsyncFactory.rsyncConfigId(id, 'push', function() {    
-    setTimeout( () => { 
-      syncRequest(id); 
-    }, 10);
+    return;   
+
+  var actions = [ 'push' , 'pull' , 'push-pull' , 'pull-push'];
+  var actionId = _appSettings.config.syncConfigs[id].action;    
+  var executeActions = actions[actionId].split('-');
+  //syncPart = executeActions.length > 1 ? syncPart : 0;
+  
+  rsyncFactory.rsyncConfigId(id, executeActions[syncPart], function() {
+    // when sync is complete
+    if(executeActions.length == 1 || (executeActions.length > 1 && syncPart ==1) ) {
+      syncTime[id] = new Date();
+    }
+    if(syncPart == 0 && executeActions.length > 1) {
+      // if first sync part is complete, and tehre is second part, run it.
+      startSync(id, 1);      
+      return;
+    }
+
+    const sec = (new Date() - syncTime[id]) / 1000;
+
+    if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+      // eligable for re-sync
+      startSync(id, 0);
+    }
+    else {
+      if(configChanged || isPausedChanged) {          
+        if(rsyncFactory.getStartedSyncIds().length == 0) {
+          configChangedActions();
+        }
+        return;
+      }
+      const remindingTime = Math.round( _appSettings.config.syncConfigs[id].interval - sec);
+      console.log("check again in " + remindingTime + " sec.");
+      syncTimeoutIds[id] = setTimeout( () => {
+        // check again in `remindingTime` seconds.
+        startSync(id, 0);
+      }, remindingTime * 1000);
+    }
   });
+
 }
 
 // When config updates, or loads do these:
@@ -79,8 +84,9 @@ function startTimeBasedSync() {
   // set up time based sync for each config.
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
   setTimeout(() => {
-    _appSettings.config.syncConfigs.forEach((element, id) => {   
-      if(element.autosync && element.active && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+    _appSettings.config.syncConfigs.forEach((element, id) => {  
+      if(element.active && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+        debugger;
         startSync(id, 0);
       }
     });

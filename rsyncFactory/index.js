@@ -22,9 +22,8 @@ function rsyncAll(mode) {
  * @param {int} id sync job jd
  * @param {string} mode - pull / push
  * @param {cakkback} onComplete 
- * @param {bool} ignoreFirstTimeSync the request is comming from button for example, we ignore the first time sync.
  */
-function rsyncConfigId(id, mode, onComplete, ignoreFirstTimeSync) {
+function rsyncConfigId(id, mode, onComplete) {
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>", onComplete);
@@ -35,12 +34,12 @@ function rsyncConfigId(id, mode, onComplete, ignoreFirstTimeSync) {
   startedSyncIds.push(id);
   var config = _config[id];
   if(mode == 'push')
-    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, ignoreFirstTimeSync);
+    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt);
   else
-    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt, ignoreFirstTimeSync);  
+    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt);  
 }
 
-function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTimeSync) {
+function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
@@ -50,8 +49,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, ignoreFirstTi
   if(opt) {
     Object.keys(opt).forEach(function(key,index) {
       if(opt[key]) {
-        if(firstTimeSync && key !== "delete" || ignoreFirstTimeSync )
-          rsync.set(key);
+        rsync.set(key);
       }
     });    
   }
@@ -109,8 +107,23 @@ function addToLogWindow(id, mode, msg, onComplete) {
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
   } 
 
+  /*
   let log = document.getElementById("log").innerHTML;  
   document.getElementById("log").innerHTML = log + msg;  
+  */
+
+/*
+ var newtext = document.createTextNode(msg);
+ var log = document.getElementById("log");
+ log.appendChild(newtext);  
+*/
+
+var newtext = document.createElement('p');
+newtext.innerHTML = msg;
+var log = document.getElementById("log");
+log.appendChild(newtext);  
+
+
   if(!disableLogScroll)
     document.querySelector('#log').scrollTo(0,document.querySelector('#log').scrollHeight);  
 }
