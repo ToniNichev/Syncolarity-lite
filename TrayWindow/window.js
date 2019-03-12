@@ -38,7 +38,6 @@ function startSync(id, syncPart) {
   function syncRequest(id) {
     var actions = [ 'push' , 'pull' , 'push-pull' , 'pull-push'];
     var executeActions = actions[id].split('-');
-    debugger;
     
     rsyncFactory.rsyncConfigId(id, executeActions[syncPart], function() {
       // when sync is complete
