@@ -86,7 +86,6 @@ function startTimeBasedSync() {
   setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {  
       if(element.active && !rsyncFactory.getStartedSyncIds().includes(id) ) {
-        debugger;
         startSync(id, 0);
       }
     });

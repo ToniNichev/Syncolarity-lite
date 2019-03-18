@@ -92,7 +92,6 @@ function addToLogWindow(id, mode, msg, onComplete) {
     // disable tray icon animation, and pulse of the panel
     syncJobCompleted(id);
     // tray notification
-    //debugger;
     var trayMsgParts = msg.split('<br>sent ');
     if(trayMsgParts.length == 1)
     trayMsgParts[1] = "";

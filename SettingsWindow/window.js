@@ -70,7 +70,6 @@ function addOpenFolderLocation(e) {
     if (selection && selection[0]) {
       console.log('got Selection');
     }
-    debugger;
     e.currentTarget.parentElement.querySelector('input').value = selection[0];
   });    
 }
@@ -87,6 +86,12 @@ function addNewSettingsPanel() {
   document.querySelector("#settingsList").appendChild(element);
   addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
   addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.serverFolder #select-server-folder'));
+
+  // active button    
+  document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.settings.header > #active').addEventListener('click', function(e) {
+    e.target.parentElement.classList.contains("active") ? e.target.parentElement.classList.remove('active') : e.target.parentElement.classList.add('active');      
+  });
+    
   // remove sync pannel button
   document.querySelectorAll('#settingsList > .settingsPannel')[last].querySelector('.settings > button').addEventListener('click', function(e) { 
     var child = e.target.parentElement.parentElement;
