@@ -20,6 +20,7 @@ app.on('ready', function() {
     settingsWindow = new SettingsWindow(appSettings);
     setTimeout(() => {
       //autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();
     }, 2000);    
   });
 });
@@ -50,7 +51,7 @@ ipcMain.on('sync-stopped', function() {
 
 // when the update has been downloaded and is ready to be installed, notify the BrowserWindow
 autoUpdater.on('update-downloaded', (info) => {
-  trayWindow.webContents.send('updateReady')
+  trayWindow.webContents.send('updateReady');
 });
 
 // when receiving a quitAndInstall signal, quit and install the new version ;)

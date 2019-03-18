@@ -283,3 +283,8 @@ ipc.on('save-config-notify', (event, newAppConfig) => {
 
   }
 });
+
+ipc.on('update-downloaded', (event, payload) => {
+  console.log("Update downloaded!");
+  console.log(payload);
+});

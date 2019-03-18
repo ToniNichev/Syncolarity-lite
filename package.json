@@ -1,11 +1,11 @@
 {
   "name": "src",
   "productName": "Syncolarity",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "scripts": {
-    "publish": "export GH_TOKEN=b2d30b98007325a0a52947eba963bfa0d5038dbc && build -p always",
+    "publish": "export GH_TOKEN=### && build -p always",
     "start": "electron .",
     "debug": "electron . --debug",
     "pack:osx": "electron-packager . --overwrite --platform=darwin --arch=x64  --prune=true --ignore='^/release-builds$' --out=release-builds --icon=icons/icon.icns",
