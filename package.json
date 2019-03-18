@@ -1,11 +1,11 @@
 {
   "name": "src",
   "productName": "Syncolarity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
-    "publish": "export GH_TOKEN=### && build -p always",
+    "publish": "export GH_TOKEN=XXX && build -p always",
     "start": "electron .",
     "debug": "electron . --debug",
     "pack:osx": "electron-packager . --overwrite --platform=darwin --arch=x64  --prune=true --ignore='^/release-builds$' --out=release-builds --icon=icons/icon.icns",
@@ -28,12 +28,10 @@
   },
   "build": {
     "appId": "com.github.toninichev.syncolarity",
-    "mac": {
-      "category": "toninichev.syncolarity.utilities.productivity",
-      "target": [
-        "zip",
-        "dmg"
-      ]
+    "publish": {
+      "provider": "github",
+      "owner": "ToniNichev",
+      "repo": "Syncolarity-lite"
     }
   }
 }

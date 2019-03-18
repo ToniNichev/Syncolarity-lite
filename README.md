@@ -11,3 +11,7 @@
 
     "pack:osx": "./node_modules/.bin/electron-packager . $npm_package_productName --app-version=$npm_package_version --version=0.36.7 --out=builds --ignore='^/builds$' --platform=darwin --arch=x64 --sign='Developer ID Application: My Company Ltd (ABCDEFGH10)'
 
+
+
+Add release:
+  https://github.com/iffy/electron-updater-example
