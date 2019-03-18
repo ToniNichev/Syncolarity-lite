@@ -19,8 +19,8 @@ app.on('ready', function() {
     trayIcon = new TrayIcon(trayWindow.window);
     settingsWindow = new SettingsWindow(appSettings);
     setTimeout(() => {
-      autoUpdater.checkForUpdates();
-      //autoUpdater.checkForUpdatesAndNotify();
+      //autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();
     }, 2000);    
   });
 });
