@@ -1,6 +1,8 @@
 const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const rsyncFactory = require('../rsyncFactory');
+
+var appVersion = require('electron').remote.app.getVersion();
  
 const STARTUP_COUNTDOWN_TIMER = 3;
 
@@ -20,6 +22,10 @@ document.getElementById("btn-pull").addEventListener("click", function (e) {
 document.getElementById("btn-push").addEventListener("click", function (e) {
   rsyncFactory.rsyncAll('push');
 });
+
+
+document.getElementById("appTitle").innerHTML = "Syncolarity v " + appVersion;
+
 
 function prepareExcludeList(rawList) {
   if(typeof rawList == 'undefined') {
@@ -185,7 +191,7 @@ function coutdownBeforeSync() {
 }
 
 function initAppPartTwo() {
-  showModal('<p>(v1.0.3) Authomatic sync is starting in</p><button class="autoSyncCancel"><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
+  showModal('<p>Authomatic sync is starting in</p><button class="autoSyncCancel"><p>' + startupCountdown  + ' sec.</p><p>CANCEL</p></button>');
   document.querySelector('#ModalWin > div > p > button').addEventListener('click', function(event) {
     clearInterval(startupCountdownTimer);
     paused = true;

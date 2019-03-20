@@ -4,13 +4,12 @@ const TrayIcon = require('./TrayIcon');
 const SettingsWindow = require('./SettingsWindow');
 const AppSettings = require('./AppSettings');
 const {autoUpdater} = require("electron-updater");
-
   
 let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = true;
+let devMode = false;
   
 app.on('ready', function() {
   appSettings = new AppSettings(() => {  
