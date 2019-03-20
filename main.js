@@ -9,7 +9,7 @@ let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = false;
+let devMode = true;
   
 app.on('ready', function() {
   appSettings = new AppSettings(() => {  
@@ -56,4 +56,27 @@ autoUpdater.on('update-downloaded', (info) => {
 // when receiving a quitAndInstall signal, quit and install the new version ;)
 ipcMain.on("quitAndInstall", (event, arg) => {
   autoUpdater.quitAndInstall();
+});
+
+
+/* Auto updater */
+
+function sendStatusToWindow(text) {
+  console.log(">>>", text);
+  trayWindow.webContents.send('message', text);
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
 })
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+
+

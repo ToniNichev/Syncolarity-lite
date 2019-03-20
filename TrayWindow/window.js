@@ -294,3 +294,8 @@ ipc.on('update-downloaded', (event, payload) => {
   console.log("Update downloaded!");
   console.log(payload);
 });
+
+
+ipc.on('message', function(event, text) {
+  console.log(">>>", text);
+});
