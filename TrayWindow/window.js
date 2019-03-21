@@ -8,6 +8,7 @@ const STARTUP_COUNTDOWN_TIMER = 3;
 
 let _appSettings = null;
 let syncTime = [];
+let syncTimeInSeconds = [];
 let syncTimeoutIds = [];
 let configChanged = false;
 let startupCountdown = STARTUP_COUNTDOWN_TIMER;
@@ -23,8 +24,19 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
   rsyncFactory.rsyncAll('push');
 });
 
-
 document.getElementById("appTitle").innerHTML = "Syncolarity v " + appVersion;
+
+setInterval(function() {
+  for(let i=0; i < _config.length; i ++) {
+    let interval = + _config[i].interval;
+    let secondsLeft = interval - Math.round((new Date() - syncTime[i]) / 1000);
+    let progressBar = document.querySelectorAll("#settingsList .controlPannel")[0].querySelector(".syncTimeProgressBar");
+    let w = window.innerWidth / interval;
+    progressBar.style.width = secondsLeft * w + "px";
+  }
+
+
+}, 1000);
 
 
 function prepareExcludeList(rawList) {
@@ -61,7 +73,7 @@ function startSync(id, syncPart) {
       return;
     }
 
-    const sec = (new Date() - syncTime[id]) / 1000;
+    const sec = Math.round( (new Date() - syncTime[id]) / 1000 );
 
     if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
       // eligable for re-sync
@@ -159,7 +171,7 @@ document.getElementById("setup").addEventListener("click", function (e) {
 document.getElementById("pause").addEventListener("click", function (e) {
   paused = !paused;
   isPausedChanged = paused;
-  e.target.innerHTML = !paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+  e.target.innerHTML = !paused ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; 
   if(!paused) {
     showModal('<p>Sync started.</p>', 5);
     startTimeBasedSync();
@@ -196,7 +208,7 @@ function initAppPartTwo() {
     clearInterval(startupCountdownTimer);
     paused = true;
     //isPausedChanged = paused;
-    document.querySelector('#pause').innerHTML = '<i class="fas fa-pause"></i>';
+    document.querySelector('#pause').innerHTML = '<i class="fas fa-play"></i>';
     document.querySelector('body').classList.add('syncPaused');    
     dismissModal();
   });
@@ -212,20 +224,20 @@ function initApp() {
   }
   setupSyncPanels();
 
-  if(_appSettings.config.firstTimeRun==0) {
+  if(_appSettings.config.firstTimeRun==1) {
     showModal(`
       <firstTimeRun>
       <h1>Thanks for using Syncolarity!</h1>
       <hr>
       On the top left:<br>
       Use <i class="fas fa-cogs"></i> button to create new sync jobs.<br>
-      Use <i class="fas fa-play"></i> to pause/resume authomated sync jobs.<br>
+      Use <i class="fas fa-pause"></i> to pause/resume authomated sync jobs.<br>
       <button onclick="
         dismissModal();
         document.querySelector('.close').style.display = 'block';
-        _appSettings.config.firstTimeRun = 1;
+        _appSettings.config.firstTimeRun = 0;
         ipc.send('save-config-notify', _appSettings);
-        initAppPartTwo();
+        setTimeout( function() { initAppPartTwo();}, 500);
         ">GOT IT!</button>
       </firstTimeRun>
     `);  
