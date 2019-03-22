@@ -30,8 +30,8 @@ setInterval(function() {
   for(let i=0; i < _config.length; i ++) {
     let interval = + _config[i].interval;
     let secondsLeft = interval - Math.round((new Date() - syncTime[i]) / 1000);
-    let progressBar = document.querySelectorAll("#settingsList .controlPannel")[0].querySelector(".syncTimeProgressBar");
-    let w = window.innerWidth / interval;
+    let progressBar = document.querySelectorAll("#settingsList .controlPannel")[i].querySelector(".syncTimeProgressBar");
+    let w = (window.innerWidth - 10) / interval;
     progressBar.style.width = secondsLeft * w + "px";
   }
 
