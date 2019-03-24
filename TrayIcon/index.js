@@ -32,7 +32,7 @@ class TrayIcon {
         this.trayWindow.hide();
       } else {
         let positioner = new Positioner(this.trayWindow);
-        positioner.move('trayCenter', bounds)
+        positioner.move('trayCenter', bounds);
 
         this.trayWindow.show();
       }
