@@ -9,7 +9,7 @@ let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = true;
+let devMode = false;
 
 function sendStatusToWindow(text) {
   trayWindow.window.webContents.send('message', text);
