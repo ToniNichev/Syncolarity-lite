@@ -109,14 +109,14 @@ document.getElementById("save").addEventListener("click", function (e) {
   var appSettingsConfig = [];
   var len = document.querySelectorAll('#settingsList .settingsPannel').length;
   for(var co = 0; co < len ;co ++) {
-    var config = {"TEST" : "55555555555555"};
+    var config = {};
     config.syncFolder = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value;    
     config.title = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#title').value; 
     config.serverUrl = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value; 
     config.exclusions = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value;
     config.interval = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#interval').value;
     config.autosyncActive = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosyncActive').checked;    
-    var selectObj = config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
+    var selectObj = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
     config.action = selectObj.selectedIndex;
     // options
     config.opt = {};

@@ -103,7 +103,7 @@ function startTimeBasedSync() {
   setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {  
       //console.log(">>>", element.)
-      if(element.active && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+      if(element.autosyncActive && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         startSync(id, 0);
       }
     });
