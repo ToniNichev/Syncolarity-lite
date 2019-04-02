@@ -27,6 +27,8 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
 document.getElementById("appTitle").innerHTML = "Syncolarity v " + appVersion;
 
 setInterval(function() {
+  if(typeof _config == 'undefined')
+    return;
   for(let i=0; i < _config.length; i ++) {
     let interval = + _config[i].interval;
     let secondsLeft = interval - Math.round((new Date() - syncTime[i]) / 1000);

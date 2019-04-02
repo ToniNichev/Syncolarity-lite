@@ -12,17 +12,27 @@ class AppSettings {
   
   loadSettings() {
     let filepath = this.filepath;
-    fs.readFile(filepath, 'utf-8', (err, data) => {
-      if(err){
-          console.log("Error loading settings!");
-          return;
-      }    
 
-      this.config = JSON.parse(data); 
-      if(typeof this.callback != 'undefined') {
-        this.callback();
+    try {
+      if (fs.existsSync(filepath)) {
+        //settings exists
+        fs.readFile(filepath, 'utf-8', (err, data) => {
+          if(err){
+              console.log("Error loading settings!");
+              return;
+          }    
+    
+          this.config = JSON.parse(data); 
+          if(typeof this.callback != 'undefined') {
+            this.callback();
+          }
+        });        
       }
-    });    
+    } catch(err) {
+      // create config for the first time
+      let appSettingsConfig = '{"firstTimeRun":1,"syncConfigs":[]}';
+      saveSettings(appSettingsConfig);
+    }    
   }
 
   saveSettings(appSettingsConfig) {   
