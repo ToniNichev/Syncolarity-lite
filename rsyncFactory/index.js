@@ -106,16 +106,6 @@ function addToLogWindow(id, mode, msg, onComplete) {
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
   } 
 
-  /*
-  let log = document.getElementById("log").innerHTML;  
-  document.getElementById("log").innerHTML = log + msg;  
-  */
-
-/*
- var newtext = document.createTextNode(msg);
- var log = document.getElementById("log");
- log.appendChild(newtext);  
-*/
 
 var newtext = document.createElement('p');
 newtext.innerHTML = msg;

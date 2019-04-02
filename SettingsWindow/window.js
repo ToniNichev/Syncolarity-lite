@@ -37,7 +37,7 @@ function init() {
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value = config.serverUrl; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value = config.exclusions;
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#interval').value = config.interval;
-    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosync').checked = config.autosync;   
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosyncActive').checked = config.autosyncActive;   
     var selectObj = config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
     selectObj.selectedIndex = config.action; 
     // options
@@ -115,7 +115,7 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.serverUrl = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value; 
     config.exclusions = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value;
     config.interval = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#interval').value;
-    config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosync').checked;    
+    config.autosyncActive = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #autosyncActive').checked;    
     var selectObj = config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
     config.action = selectObj.selectedIndex;
     // options
@@ -128,6 +128,7 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.opt.delete = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-delete').checked;
     appSettingsConfig.push(config);
   }  
+  console.log(">>>", appSettingsConfig);
   _appSettings.config.syncConfigs = appSettingsConfig;
   ipc.send('save-config-notify', _appSettings);
   showModal('Config saved! New settings will be applied after curent jobs are completed or sync is unpaused!', 5);

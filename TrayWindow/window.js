@@ -60,7 +60,6 @@ function startSync(id, syncPart) {
   var actions = [ 'push' , 'pull' , 'push-pull' , 'pull-push'];
   var actionId = _appSettings.config.syncConfigs[id].action;    
   var executeActions = actions[actionId].split('-');
-  //syncPart = executeActions.length > 1 ? syncPart : 0;
   
   rsyncFactory.rsyncConfigId(id, executeActions[syncPart], function() {
     // when sync is complete
@@ -103,6 +102,7 @@ function startTimeBasedSync() {
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
   setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {  
+      //console.log(">>>", element.)
       if(element.active && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         startSync(id, 0);
       }
