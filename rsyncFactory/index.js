@@ -4,7 +4,7 @@ var startedSyncIds = [];
 var disableLogScroll = false;
 var lastSyncStatus = [];
 var onCompleteFuncs = [];
-var firstTimeSync = true;
+var rsyncMessagesCount = [];
 
 function loadConfig(config) {
   _config = config.config.syncConfigs;
@@ -24,6 +24,7 @@ function rsyncAll(mode) {
  * @param {cakkback} onComplete 
  */
 function rsyncConfigId(id, mode, onComplete) {
+  rsyncMessagesCount[id] = 0;
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>", onComplete);
@@ -73,6 +74,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
       syncJobCompleted(id);      
     }
   }, function(stdOutChunk){
+      rsyncMessagesCount[id] = rsyncMessagesCount[id] + 1;
       body += stdOutChunk;
       var msg = stdOutChunk.toString();
       addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
@@ -97,7 +99,7 @@ function addToLogWindow(id, mode, msg, onComplete) {
     trayMsgParts[1] = "";
     let trayMsg = trayMsgParts[1].replace(/<br>/g, '');
     let tryMsgTitle = trayMsgParts[1] == '' ? 'Error syncing ' +  _config[id].title + "!" : 'Sync ' +  _config[id].title + ' complete!';
-    sendNotification(tryMsgTitle, trayMsg, 'request-showing-of-main-window', onComplete);
+    sendNotification(id, tryMsgTitle, trayMsg, 'request-showing-of-main-window', onComplete);    
     // footer and status notification msg
     const title = _config[id].title;
     const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
@@ -133,18 +135,23 @@ document.querySelector('#log').addEventListener('mouseleave', function (e) {
  
  
 
-function sendNotification(title, message, mainProcessNotificationType, onComplete) {
-  // shows notification panel
-  notif = new window.Notification( title, {
-    body: message
-  });
+function sendNotification(id, title, message, mainProcessNotificationType, onComplete) {
 
-  // send notification to the main process if needed
-  if(mainProcessNotificationType != null) {
-    notif.onclick = function () {
-      window.ipcRenderer.send(mainProcessNotificationType);
+  if(rsyncMessagesCount[id] > 5) {
+    // send notification only if there are real updates
+    let notif = new window.Notification( title, {
+      body: message
+    });
+
+    // send notification to the main process if needed
+    if(mainProcessNotificationType != null) {
+      notif.onclick = function () {
+        window.ipcRenderer.send(mainProcessNotificationType);
+      }    
     }    
   }
+  rsyncMessagesCount[id] = 0;
+
   
   if(onComplete != null) {
     onComplete();
