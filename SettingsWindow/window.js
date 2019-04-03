@@ -21,9 +21,9 @@ function init() {
 
     // active button    
     var headarBar = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings.header');
-    if(config.active)
+    if(config.autosyncActive)
       headarBar.classList.add('active');
-    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings.header > #active').addEventListener('click', function(e) {
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings.header > #autosyncActive').addEventListener('click', function(e) {
       e.target.parentElement.classList.contains("active") ? e.target.parentElement.classList.remove('active') : e.target.parentElement.classList.add('active');      
     });
 
