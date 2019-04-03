@@ -104,7 +104,6 @@ function startTimeBasedSync() {
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
   setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {  
-      //console.log(">>>", element.)
       if(element.autosyncActive && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         startSync(id, 0);
       }
