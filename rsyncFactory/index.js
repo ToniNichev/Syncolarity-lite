@@ -46,7 +46,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
     .flags('av')
     .source(from + '/')
     .destination(to);
-    
+
   if(opt) {
     Object.keys(opt).forEach(function(key,index) {
       if(opt[key]) {
@@ -73,11 +73,11 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
       // disable tray icon animation, and pulse of the panel
       syncJobCompleted(id);      
     }
-  }, function(stdOutChunk){
-    console.log(stdOutChunk.toString());
-      rsyncMessagesCount[id] = rsyncMessagesCount[id] + 1;
-      body += stdOutChunk;
+  }, function(stdOutChunk){      
       var msg = stdOutChunk.toString();
+      if(msg.match(/[0-9]*\sfiles\.\.\./gi, ''))
+        return;
+      rsyncMessagesCount[id] = rsyncMessagesCount[id] + 1;        
       addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
       firstTimeSync = false;
       // disable tray icon animation, and pulse of the panel
