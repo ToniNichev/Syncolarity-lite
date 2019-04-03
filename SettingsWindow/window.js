@@ -41,7 +41,6 @@ function init() {
     var selectObj = config.autosync = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #action'); 
     selectObj.selectedIndex = config.action; 
     // options
-    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #active').checked = config.active;    
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-a').checked = config.opt.a;
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-u').checked = config.opt.u;
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked = config.opt.z;
@@ -88,7 +87,7 @@ function addNewSettingsPanel() {
   addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.serverFolder #select-server-folder'));
 
   // active button    
-  document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.settings.header > #active').addEventListener('click', function(e) {
+  document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.settings.header > #autosyncActive').addEventListener('click', function(e) {
     e.target.parentElement.classList.contains("active") ? e.target.parentElement.classList.remove('active') : e.target.parentElement.classList.add('active');      
   });
     
@@ -120,7 +119,6 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.action = selectObj.selectedIndex;
     // options
     config.opt = {};
-    config.active = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #active').checked;
     config.opt.a = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-a').checked;
     config.opt.u = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-u').checked;
     config.opt.z = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked;

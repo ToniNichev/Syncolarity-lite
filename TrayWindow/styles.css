@@ -39,7 +39,7 @@
 
 
 
-#settingsList button, #footer button {
+#settingsList button, #footer button, #controls button {
   padding: 8px;
   border-radius: 7px;
   margin-left: 10px;
@@ -88,6 +88,7 @@ input {
 }
 
 #controls {
+  padding-top: 5px;
   display: flex;
 }
 
@@ -128,7 +129,7 @@ statusError {
 
 #logWrapper {
   position: absolute;
-  height: 266px;
+  height: 260px;
   width: 100%;
   top:407px;
   transition: all 500ms;

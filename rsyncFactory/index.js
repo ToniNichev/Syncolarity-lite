@@ -74,6 +74,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
       syncJobCompleted(id);      
     }
   }, function(stdOutChunk){
+    console.log(stdOutChunk.toString());
       rsyncMessagesCount[id] = rsyncMessagesCount[id] + 1;
       body += stdOutChunk;
       var msg = stdOutChunk.toString();
