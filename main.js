@@ -28,6 +28,7 @@ app.on('ready', function() {
   });
 });
 
+app.dock.hide();
 
 app.on('quit-app', function() {
   tray.window.close();

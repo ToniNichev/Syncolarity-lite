@@ -8,7 +8,6 @@ const STARTUP_COUNTDOWN_TIMER = 3;
 
 let _appSettings = null;
 let syncTime = [];
-let syncTimeInSeconds = [];
 let syncTimeoutIds = [];
 let configChanged = false;
 let startupCountdown = STARTUP_COUNTDOWN_TIMER;
