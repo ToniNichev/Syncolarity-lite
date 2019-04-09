@@ -74,9 +74,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
       // disable tray icon animation, and pulse of the panel
       syncJobCompleted(id);      
     }
-    else {
-      onCompleteFuncs[id]();
-    }
+    onCompleteFuncs[id]();
   }, function(stdOutChunk){      
       var msg = stdOutChunk.toString();
       if(msg.match(/[0-9]*\sfiles\.\.\./gi, ''))
@@ -86,7 +84,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   });
 }
 
-function addToLogWindow(id, mode, msg, onComplete) {
+function addToLogWindow(id, mode, msg) {
   msg = msg.split("\n").join("<br>");
 
   // if sync completed, execute the code below.  
@@ -101,7 +99,7 @@ function addToLogWindow(id, mode, msg, onComplete) {
     trayMsgParts[1] = "";
     let trayMsg = trayMsgParts[1].replace(/<br>/g, '');
     let tryMsgTitle = trayMsgParts[1] == '' ? 'Error syncing ' +  _config[id].title + "!" : 'Sync ' +  _config[id].title + ' complete!';
-    sendNotification(id, tryMsgTitle, trayMsg, 'request-showing-of-main-window', onComplete);    
+    sendNotification(id, tryMsgTitle, trayMsg, 'request-showing-of-main-window');    
     // footer and status notification msg
     const title = _config[id].title;
     const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
@@ -137,7 +135,7 @@ document.querySelector('#log').addEventListener('mouseleave', function (e) {
  
  
 
-function sendNotification(id, title, message, mainProcessNotificationType, onComplete) {
+function sendNotification(id, title, message, mainProcessNotificationType) {
 
   if(rsyncMessagesCount[id] > 5) {
     // send notification only if there are real updates
@@ -152,12 +150,7 @@ function sendNotification(id, title, message, mainProcessNotificationType, onCom
       }    
     }    
   }
-  rsyncMessagesCount[id] = 0;
-
-  
-  if(onComplete != null) {
-    //onComplete();
-  }  
+  rsyncMessagesCount[id] = 0; 
 }
 
 function _getStartedSyncIds() {
