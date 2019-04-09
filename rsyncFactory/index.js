@@ -75,7 +75,6 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
       syncJobCompleted(id);      
     }
     else {
-      console.log("DONE WITH :", id);
       onCompleteFuncs[id]();
     }
   }, function(stdOutChunk){      
