@@ -27,6 +27,7 @@ function rsyncConfigId(id, mode, onComplete) {
   rsyncMessagesCount[id] = 0;
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
+
     addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
   }
@@ -73,15 +74,16 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
       // disable tray icon animation, and pulse of the panel
       syncJobCompleted(id);      
     }
+    else {
+      console.log("DONE WITH :", id);
+      onCompleteFuncs[id]();
+    }
   }, function(stdOutChunk){      
       var msg = stdOutChunk.toString();
       if(msg.match(/[0-9]*\sfiles\.\.\./gi, ''))
         return;
       rsyncMessagesCount[id] = rsyncMessagesCount[id] + 1;        
       addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
-      firstTimeSync = false;
-      // disable tray icon animation, and pulse of the panel
-      syncJobCompleted(id);
   });
 }
 
@@ -107,14 +109,14 @@ function addToLogWindow(id, mode, msg, onComplete) {
     const _date = new Date().toString();
     msg = trayMsgParts[0] + '<footer>' + m + ' ' + title + ' complete! ' +  _date + "<linebreak />" + trayMsgParts[1] + '</footer><br><br>';
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
+    // disable tray icon animation, and pulse of the panel
+    syncJobCompleted(id);    
   } 
 
-
-var newtext = document.createElement('p');
-newtext.innerHTML = msg;
-var log = document.getElementById("log");
-log.appendChild(newtext);  
-
+  var newtext = document.createElement('p');
+  newtext.innerHTML = msg;
+  var log = document.getElementById("log");
+  log.appendChild(newtext);  
 
   if(!disableLogScroll)
     document.querySelector('#log').scrollTo(0,document.querySelector('#log').scrollHeight);  
@@ -155,7 +157,7 @@ function sendNotification(id, title, message, mainProcessNotificationType, onCom
 
   
   if(onComplete != null) {
-    onComplete();
+    //onComplete();
   }  
 }
 

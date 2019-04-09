@@ -4,7 +4,7 @@ const rsyncFactory = require('../rsyncFactory');
 
 var appVersion = require('electron').remote.app.getVersion();
  
-const STARTUP_COUNTDOWN_TIMER = 3;
+const STARTUP_COUNTDOWN_TIMER = 1;
 
 let _appSettings = null;
 let syncTime = [];
@@ -54,7 +54,6 @@ function prepareExcludeList(rawList) {
  */
 function startSync(id, syncPart) {
 
-
   if(paused == true)
     return;   
 
@@ -63,6 +62,7 @@ function startSync(id, syncPart) {
   var executeActions = actions[actionId].split('-');
   
   rsyncFactory.rsyncConfigId(id, executeActions[syncPart], function() {
+    
     // when sync is complete
     if(executeActions.length == 1 || (executeActions.length > 1 && syncPart ==1) ) {
       syncTime[id] = new Date();
@@ -78,36 +78,38 @@ function startSync(id, syncPart) {
     if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
       // eligable for re-sync
       startSync(id, 0);
+      return;
     }
     else {
       if(configChanged || isPausedChanged) {          
         if(rsyncFactory.getStartedSyncIds().length == 0) {
           configChangedActions();
         }
+        console.log("RETURN CALLED (1)");
         return;
       }
       const remindingTime = Math.round( _appSettings.config.syncConfigs[id].interval - sec);
       console.log("check again in " + remindingTime + " sec.");
       syncTimeoutIds[id] = setTimeout( () => {
         // check again in `remindingTime` seconds.
+        console.log("Check again after ", remindingTime);
         startSync(id, 0);
       }, remindingTime * 1000);
     }
   });
-
 }
 
 // When config updates, or loads do these:
 function startTimeBasedSync() {
   // set up time based sync for each config.
   startupCountdown = STARTUP_COUNTDOWN_TIMER;
-  setTimeout(() => {
+  //setTimeout(() => {
     _appSettings.config.syncConfigs.forEach((element, id) => {  
       if(element.autosyncActive && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         startSync(id, 0);
       }
     });
-  }, 1000); 
+  //}, 1000); 
 }
 
 
