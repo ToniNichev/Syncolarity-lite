@@ -35,8 +35,6 @@ setInterval(function() {
     let w = (window.innerWidth - 10) / interval;
     progressBar.style.width = secondsLeft * w + "px";
   }
-
-
 }, 1000);
 
 
@@ -61,34 +59,43 @@ function startSync(id, syncPart) {
   var actionId = _appSettings.config.syncConfigs[id].action;    
   var executeActions = actions[actionId].split('-');
   
+  console.log("Sync start: ", id, syncPart, new Date());
   rsyncFactory.rsyncConfigId(id, executeActions[syncPart], function() {
-    
+    console.log("Sync complete callback: ", id, syncPart, new Date());
+
     // when sync is complete
     if(executeActions.length == 1 || (executeActions.length > 1 && syncPart ==1) ) {
       syncTime[id] = new Date();
     }
+
     if(syncPart == 0 && executeActions.length > 1) {
       // if first sync part is complete, and tehre is second part, run it.
+      console.log("Sync complete callback - starting part two: ", id, new Date());
       startSync(id, 1);      
       return;
     }
 
-    const sec = Math.round( (new Date() - syncTime[id]) / 1000 );
+    const sec = Math.round( (new Date() - syncTime[id]) / 1000 ); // seconds passed since last sync
 
-    if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
-      // eligable for re-sync
+    if( sec > + _appSettings.config.syncConfigs[id].interval) {
+      // !rsyncFactory.getStartedSyncIds().includes(id)
+      // eligable for re-sync, run sync again.
+      console.log("Sync complete callback - eligable for sync starting part one: ", id, new Date());
       startSync(id, 0);
       return;
     }
     else {
+      // seconds since last sync are less than what is eligable to re-sync
+      // Check again after X seconds.
+      /*
       if(configChanged || isPausedChanged) {          
         if(rsyncFactory.getStartedSyncIds().length == 0) {
           configChangedActions();
         }
-        console.log("RETURN CALLED (1)");
         return;
       }
-      const remindingTime = Math.round( _appSettings.config.syncConfigs[id].interval - sec);
+      */
+      const remindingTime = (Math.round( _appSettings.config.syncConfigs[id].interval - sec) + 1);
       console.log("check again in " + remindingTime + " sec.");
       syncTimeoutIds[id] = setTimeout( () => {
         // check again in `remindingTime` seconds.
