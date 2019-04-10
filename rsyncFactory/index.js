@@ -28,7 +28,8 @@ function rsyncConfigId(id, mode, onComplete) {
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
 
-    addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>", onComplete);
+    debugger;
+    addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>");
     return;
   }
 
@@ -62,25 +63,30 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
   const _date = new Date().toString();
   lastSyncStatus[id] = "<statusOK>" + m + _date + "</statusOK>";
-  addToLogWindow(id, mode, "<header>" + m + " " +  title + " : " + _date + "</header>", onCompleteFuncs[id]);
+  addToLogWindow(id, mode, "<header>" + m + " " +  title + " : " + _date + "</header>");
   document.querySelector(".controlPannel[key='" + id + "']").classList.add("pulse");    
   
-  rsync.execute(function(error, code, cmd, onComplete) {
+  rsync.execute(function(error, code, cmd) {
     if(error) {
       const m = '<i class="fas fa-exclamation-circle"></i>';
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
-      addToLogWindow(id, mode, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onCompleteFuncs[id]);
+      addToLogWindow(id, mode, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.");
       // disable tray icon animation, and pulse of the panel
       syncJobCompleted(id);      
+      console.error("Sync error: ", id);
     }
+    // When sync job is completed
+    removeStartedSyncId(id); 
+    syncJobCompleted(id);         
     onCompleteFuncs[id]();
+    // --------------------------
   }, function(stdOutChunk){      
       var msg = stdOutChunk.toString();
       if(msg.match(/[0-9]*\sfiles\.\.\./gi, ''))
         return;
       rsyncMessagesCount[id] = rsyncMessagesCount[id] + 1;        
-      addToLogWindow(id,mode, msg + "<br>", onCompleteFuncs[id]);
+      addToLogWindow(id,mode, msg + "<br>");
   });
 }
 
