@@ -10,6 +10,7 @@ class TrayWindow {
       height: 710,
       width: appSettings.devMode ? 1900 : 600,
       frame: false,  
+      transparent: true, 
       backgroundColor: '#E4ECEF',
       resizable: false
     });    

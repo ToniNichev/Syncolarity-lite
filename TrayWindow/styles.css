@@ -92,7 +92,7 @@ input {
   display: flex;
 }
 
-#setup, #pause {
+#setup, #pause, #quit {
   background: none;
   border: none;
   cursor: pointer;

@@ -9,7 +9,7 @@ let trayWindow = null;
 let trayIcon = null;
 let appSettings = null;
 let settingsWindow = null;
-let devMode = false;
+let devMode = true;
 
 function sendStatusToWindow(text) {
   trayWindow.window.webContents.send('message', text);
@@ -31,6 +31,7 @@ app.on('ready', function() {
 app.dock.hide();
 
 app.on('quit-app', function() {
+  console.log(">>>> !!!Window-all-closed");
   tray.window.close();
   app.quit();
 });
@@ -52,6 +53,11 @@ ipcMain.on('sync-stopped', function() {
 });
 
 
+app.on('Window-all-closed',()=> {
+  console.log(">>>> Window-all-closed");
+  tray.window.close();  
+  app.quit();
+  });
 
 
 // when receiving a quitAndInstall signal, quit and install the new version ;)

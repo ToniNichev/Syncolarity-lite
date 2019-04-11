@@ -27,8 +27,6 @@ function rsyncConfigId(id, mode, onComplete) {
   rsyncMessagesCount[id] = 0;
   onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
-
-    debugger;
     addToLogWindow(id, mode, "<important>Synk in progress, skipping!</important><br/>");
     return;
   }
@@ -79,7 +77,8 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
     // When sync job is completed
     removeStartedSyncId(id); 
     syncJobCompleted(id);         
-    onCompleteFuncs[id]();
+    if(onCompleteFuncs[id] != null && typeof onCompleteFuncs[id] != 'undefined')
+      onCompleteFuncs[id]();
     // --------------------------
   }, function(stdOutChunk){      
       var msg = stdOutChunk.toString();
