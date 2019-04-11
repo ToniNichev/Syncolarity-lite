@@ -40,7 +40,11 @@ class TrayWindow {
     ipcMain.on('save-config-notify', (event, newConfig) => {
       console.log(">>>> save-config-notify", newConfig);
       this.window.webContents.send('save-config-notify', newConfig);
-    })      
+    });
+    
+    this.window.on('request-app-guit', () => {
+      console.log("!@!@!!@!@!");
+    });      
 
   }
 }

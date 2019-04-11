@@ -224,6 +224,7 @@ function initAppPartTwo() {
 
   document.getElementById("quit").addEventListener("click", function (e) {
     alert("Quit clicked");
+    window.ipcRenderer.send('request-app-guit');
   });
 
   coutdownBeforeSync();  
