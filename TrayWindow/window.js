@@ -223,8 +223,7 @@ function initAppPartTwo() {
   });
 
   document.getElementById("quit").addEventListener("click", function (e) {
-    alert("Quit clicked");
-    window.ipcRenderer.send('request-app-guit');
+    ipc.send('request-app-guit', _appSettings);
   });
 
   coutdownBeforeSync();  
