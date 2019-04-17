@@ -238,6 +238,7 @@ function initApp() {
   }
   setupSyncPanels();
 
+  console.log(_appSettings.config);
   if(_appSettings.config.firstTimeRun==1) {
     showModal(`
       <firstTimeRun>

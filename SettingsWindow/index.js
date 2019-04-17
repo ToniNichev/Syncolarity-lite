@@ -32,11 +32,12 @@ class SettingsWindow {
       this.window.webContents.send('ready-to-show', appSettings);
     });
     
-    // Messages from renderer 
 
     // save window clicked
     ipcMain.on('save-config-notify', function (event, appSettingsConfig) {
+      //this.window.webContents.send('save-config-notify-test', "Test 123");
       appSettings.saveSettings(appSettingsConfig.config);
+
     })    
   }
 

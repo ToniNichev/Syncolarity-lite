@@ -44,9 +44,7 @@ class TrayWindow {
 
     ipcMain.on('request-app-guit', function (event, appSettingsConfig) {
       app.quit();
-    })    
-
-  
+    })      
   }
 }
 

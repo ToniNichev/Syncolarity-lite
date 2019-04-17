@@ -1,18 +1,24 @@
 const fs = require('fs');
 const path = require('path');
+const {app} = require('electron');
 class AppSettings {
 
   constructor(callback) {
     this.test = [];
-    this.filepath = path.join(__dirname, '/../settings/app-settings.json');    
+    this.filepath = this.getFilePath();    
     this.callback = callback;
     this.loadSettings();
 
   } 
+
+  getFilePath() {
+    let filePath = app.getPath('userData');
+    filePath = path.join(filePath, 'app-settings.json');
+    return filePath;
+  }  
   
   loadSettings() {
     let filepath = this.filepath;
-
     if (fs.existsSync(filepath)) {
       //settings exists
       fs.readFile(filepath, 'utf-8', (err, data) => {
@@ -41,6 +47,9 @@ class AppSettings {
     let filepath = this.filepath;
     console.log("Saving file :", filepath);
     let cfg = JSON.stringify(this.config);
+    
+
+
     fs.writeFile(filepath, cfg,  function (err) {
       console.log("SAVED");
       if(err){

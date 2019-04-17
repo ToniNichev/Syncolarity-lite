@@ -156,3 +156,9 @@ ipc.on('ready-to-show', (event, payload) => {
 ipc.on('show', (event, payload) => {
   console.log(payload);
 });
+
+// save window clicked
+ipc.on('save-config-notify-test', function (event, appSettingsConfig) {
+  console.log("############################");
+  console.log(config);
+})  
