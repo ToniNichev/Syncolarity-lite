@@ -208,7 +208,7 @@ function coutdownBeforeSync() {
       startTimeBasedSync();
       dismissModal();
     }
-  },1000);
+  },3000);
 }
 
 function initAppPartTwo() {
