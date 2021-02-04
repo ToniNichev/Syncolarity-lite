@@ -58,7 +58,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   if(excludeList[0])
     rsync.exclude(excludeList);
 
-  const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
+  const m = mode == 'push' ? '<i class="fas fa-upload"></i> ' : '<i class="fas fa-download"></i> ';
   const _date = new Date().toString();
   lastSyncStatus[id] = "<statusOK>" + m + _date + "</statusOK>";
   addToLogWindow(id, mode, "<header>" + m + " " +  title + " : " + _date + "</header>");
@@ -66,7 +66,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   
   rsync.execute(function(error, code, cmd) {
     if(error) {
-      const m = '<i class="fas fa-exclamation-circle"></i>';
+      const m = '<i class="fas fa-exclamation-circle"></i> ';
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
       addToLogWindow(id, mode, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.");
@@ -107,7 +107,7 @@ function addToLogWindow(id, mode, msg) {
     sendNotification(id, tryMsgTitle, trayMsg, 'request-showing-of-main-window');    
     // footer and status notification msg
     const title = _config[id].title;
-    const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
+    const m = mode == 'push' ? '<i class="fas fa-upload"></i> ' : '<i class="fas fa-download"></i> ';
     const _date = new Date().toString();
     msg = trayMsgParts[0] + '<footer>' + m + ' ' + title + ' complete! ' +  _date + "<linebreak />" + trayMsgParts[1] + '</footer><br><br>';
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];

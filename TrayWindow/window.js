@@ -4,7 +4,7 @@ const rsyncFactory = require('../rsyncFactory');
 
 var appVersion = require('electron').remote.app.getVersion();
  
-const STARTUP_COUNTDOWN_TIMER = 1;
+const STARTUP_COUNTDOWN_TIMER = 5;
 
 let _appSettings = null;
 let syncTime = [];
@@ -208,7 +208,7 @@ function coutdownBeforeSync() {
       startTimeBasedSync();
       dismissModal();
     }
-  },3000);
+  },1000);
 }
 
 function initAppPartTwo() {

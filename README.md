@@ -1,2 +1,2 @@
 # Sincularity-lite
-- The sync app
+- Rsync UI app

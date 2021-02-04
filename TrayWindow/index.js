@@ -8,7 +8,7 @@ class TrayWindow {
     this.window = new BrowserWindow({
       show: false, // Initially, we should hide it, in such way we will remove blink-effect. 
       height: 710,
-      width: appSettings.devMode ? 1900 : 600,
+      width: appSettings.devMode ? 1900 : 900,
       frame: false,  
       transparent: true, 
       backgroundColor: '#E4ECEF',
@@ -38,7 +38,6 @@ class TrayWindow {
 
     // save window clicked
     ipcMain.on('save-config-notify', (event, newConfig) => {
-      console.log(">>>> save-config-notify", newConfig);
       this.window.webContents.send('save-config-notify', newConfig);
     });
 

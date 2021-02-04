@@ -28,10 +28,9 @@ app.on('ready', function() {
   });
 });
 
-//app.dock.hide();
+app.dock.hide();
 
 app.on('quit-app', function() {
-  console.log(">>>> !!!Window-all-closed");
   tray.window.close();
   app.quit();
 });
@@ -54,7 +53,6 @@ ipcMain.on('sync-stopped', function() {
 
 
 app.on('Window-all-closed',()=> {
-  console.log(">>>> Window-all-closed");
   tray.window.close();  
   app.quit();
   });
