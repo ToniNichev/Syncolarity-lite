@@ -1,13 +1,17 @@
 {
   "name": "src",
   "productName": "Syncolarity",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "main.js",
   "scripts": {
     "publish": "build -p always",
     "start": "electron .",
-    "debug": "electron . --debug"
+    "debug": "electron . --debug",
+    "pack:osx": "electron-packager . --overwrite --platform=darwin --arch=x64  --prune=true --ignore='^/release-builds$' --out=release-builds --icon=icons/icon.icns",
+    "pack:win": "./node_modules/.bin/electron-packager . $npm_package_syncolarity --app-version=$npm_package_version --app-version=0.36.7 --out=builds --ignore='^/builds$' --platform=win32 --arch=ia32 --version-string.CompanyName='My Company Ltd' --version-string.LegalCopyright='Copyright (C) 2016 My Company Ltd' --version-string.FileDescription=$npm_package_productName --version-string.OriginalFilename='MyApp.exe' --version-string.InternalName=$npm_package_productName --version-string.ProductName=$npm_package_productName --version-string.ProductVersion=$npm_package_version --asar=true --icon=logo.ico --overwrite",
+    "build123": "build --win",
+    "ship": "build --win -p always"
   },
   "keywords": [],
   "author": "",
